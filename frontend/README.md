@@ -9,6 +9,16 @@ Enhance a previous frontend project and convert it into a full stack application
 The original website sources its data from a JSON file but now, a new Postgresql Database
 will be integrated, along with other authentication features.
 
+## Running the application
+
+First, start the HTTP Server. Remember to "cd" into the Frontend folder.
+
+```
+python3 -m http.server 8000
+```
+
+Finally, visit [http://localhost:8000](http://localhost:8000)
+
 ## Leaflet.js and Mapbox:
 
 This repository uses [leafletjs](https://leafletjs.com/) with [Mapbox](https://www.mapbox.com/).

@@ -55,7 +55,7 @@ a service worker that creates a seamless offline experience for the users.
 
 ### Backend
 
-The `./backend` directory contains a completed Flask server with a complete set of
+The `./backend` directory contains a complete Flask-SQLAlchemy server with a set of
 endpoints. Auth0 has been integrated for authentication.
 
 [View the README.md within ./backend for more details.](./backend/README.md)
@@ -69,7 +69,7 @@ the data from the Flask server.
 
 ## Contributing
 
-This repository is the result of a project I am working on to finish a Full-Stack Developer Nanodegree Program. Therefore, all contributions are considered.
+This repository is the result of a project I am working on to finish a Full-Stack Developer Nanodegree Program. Therefore, all contributions are welcome.
 
 ## License
 
