@@ -42,6 +42,7 @@ class Restaurant(db.Model):
     latlng = Column(String, nullable = False)
     cuisine = Column(String, nullable = False)
     operating_hours = Column(String, nullable = False)
+    reviews = db.relationship('Review', backref='restaurant', lazy=True)
 
     def __init__(self, name, borough, photograph, img_description, address,
                  latlng, cuisine, operating_hours):
@@ -130,7 +131,7 @@ class Review(db.Model):
     __tablename__ = 'Reviews'
 
     id = Column(Integer, primary_key = True)
-    restaurant_id = Column(Integer, nullable = False)
+    restaurant_id = Column(Integer, db.ForeignKey('Restaurants.id'), nullable = False)
     name = Column(String, nullable = False)
     date = Column(DateTime, nullable = False, default = datetime.today())
     rating = Column(Integer, nullable = False)
