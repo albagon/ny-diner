@@ -12,6 +12,11 @@ class DBHelper {
     return `http://localhost:${port}/data/restaurants.json`;
   }
 
+  static get DATABASE_URL_FILTERS() {
+    const port = 8000 // Change this to your server port
+    return `http://localhost:${port}/data/filters.json`;
+  }
+
   /**
    * Fetch all restaurants.
    */
@@ -104,39 +109,24 @@ class DBHelper {
   }
 
   /**
-   * Fetch all boroughs with proper error handling.
+   * Fetch list of boroughs and cuisines
    */
-  static fetchBoroughs(callback) {
-    // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Get all boroughs from all restaurants
-        const boroughs = restaurants.map((v, i) => restaurants[i].borough)
-        // Remove duplicates from boroughs
-        const uniqueBoroughs = boroughs.filter((v, i) => boroughs.indexOf(v) == i)
-        callback(null, uniqueBoroughs);
-      }
-    });
-  }
-
-  /**
-   * Fetch all cuisines with proper error handling.
-   */
-  static fetchCuisines(callback) {
-    // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Get all cuisines from all restaurants
-        const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type)
-        // Remove duplicates from cuisines
-        const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i)
-        callback(null, uniqueCuisines);
-      }
-    });
+  static fetchFilters(callback) {
+     // Fetch filters from json file
+     let xhr = new XMLHttpRequest();
+     xhr.open('GET', DBHelper.DATABASE_URL_FILTERS);
+     xhr.onload = () => {
+       if (xhr.status === 200) { // Got a success response from server!
+         const json = JSON.parse(xhr.responseText);
+         const boroughs = json.boroughs;
+         const cuisines = json.cuisines;
+         callback(null, boroughs, cuisines);
+       } else { // Oops!. Got an error from server.
+         const error = (`Request failed. Returned status of ${xhr.status}`);
+         callback(error, null, null);
+       }
+     };
+     xhr.send();
   }
 
   /**

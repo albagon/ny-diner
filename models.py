@@ -102,7 +102,7 @@ class Restaurant(db.Model):
                   "lat": 40.713829,
                   "lng": -73.989667
                 }),
-                cuisine = "Asian",
+                cuisine = "Chinese",
                 operating_hours = str({
                   "Monday": "5:30 pm - 11:00 pm",
                   "Tuesday": "5:30 pm - 12:00 am",

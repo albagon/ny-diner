@@ -6,13 +6,15 @@ var markers = []
 
 
 /**
- * Fetch boroughs and cuisines as soon as the page is loaded.
+ * As soon as the page is loaded:
+ * 1. Register the service worker
+ * 2. Initialize the map
+ * 3. Fetch list of Boroughs and Cuisines
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   registerServiceWorker();
-  initMap(); // added
-  fetchBoroughs();
-  fetchCuisines();
+  initMap();
+  fetchFilters();
 });
 
 /**
@@ -29,15 +31,17 @@ registerServiceWorker = () => {
 }
 
 /**
- * Fetch all boroughs and set their HTML.
+ * Fetch filters (boroughs and cuisines) and set their HTML.
  */
-fetchBoroughs = () => {
-  DBHelper.fetchBoroughs((error, boroughs) => {
+fetchFilters = () => {
+  DBHelper.fetchFilters((error, boroughs, cuisines) => {
     if (error) { // Got an error
       console.error(error);
     } else {
       self.boroughs = boroughs;
+      self.cuisines = cuisines;
       fillBoroughsHTML();
+      fillCuisinesHTML();
     }
   });
 }
@@ -56,25 +60,10 @@ fillBoroughsHTML = (boroughs = self.boroughs) => {
 }
 
 /**
- * Fetch all cuisines and set their HTML.
- */
-fetchCuisines = () => {
-  DBHelper.fetchCuisines((error, cuisines) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.cuisines = cuisines;
-      fillCuisinesHTML();
-    }
-  });
-}
-
-/**
  * Set cuisines HTML.
  */
 fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
-
   cuisines.forEach(cuisine => {
     const option = document.createElement('option');
     option.innerHTML = cuisine;

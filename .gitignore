@@ -1,5 +1,3 @@
 env/
 __pycache__/
-*boroughs.txt
-*cuisines.txt
 .DS_Store
