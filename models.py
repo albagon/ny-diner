@@ -55,7 +55,26 @@ class Restaurant(db.Model):
         self.cuisine = cuisine
         self.operating_hours = operating_hours
 
-    def format(self):
+    '''
+    short()
+        Short form representation of the Restaurant model.
+    '''
+    def short(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'borough': self.borough,
+            'photograph': self.photograph,
+            'img_description': self.img_description,
+            'latlng': self.latlng,
+            'cuisine': self.cuisine
+        }
+
+    '''
+    long()
+        Long form representation of the Restaurant model.
+    '''
+    def long(self):
         return {
             'id': self.id,
             'name': self.name,

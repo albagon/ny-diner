@@ -1,5 +1,5 @@
 import os
-from flask import Flask, redirect, url_for
+from flask import Flask, jsonify, abort
 from flask_cors import CORS
 from datetime import datetime
 from models import setup_db, Restaurant, Review
@@ -42,15 +42,43 @@ def create_app(test_config = None):
         comments = "This place is a blast.")
     my_review.insert()
 
+    ## ROUTES
+
     @app.route('/')
     def index():
         healthy = os.environ['HEALTHY']
         if healthy == 'true': print("Super healthy!")
         return "Good progress!!"
 
+    '''
+    GET /restaurants
+        It should be a public endpoint.
+        It should contain only the Restaurant.short() data representation.
+        On success, this endpoint returns status code 200 and
+        json {"success": True, "restaurants": restaurants}
+        where restaurants is the list of restaurants.
+        On failure, it aborts with a 404 error code.
+    '''
     @app.route('/restaurants')
     def get_restaurants():
-        return "This will be a list of restaurants!"
+        try:
+            restaurants = Restaurant.query.all()
+            restaurants_short = []
+            if len(restaurants) != 0:
+                for restaurant in restaurants:
+                    # We need to replace all single quotes with double quotes in
+                    # order to make the data valid as a JSON string.
+                    restaurant.latlng = restaurant.latlng.replace("\'", "\"")
+                    restaurant.operating_hours = restaurant.operating_hours.replace("\'", "\"")
+                    restaurants_short.append(restaurant.short())
+
+            return jsonify({
+                    "success": True,
+                    "restaurants": restaurants_short
+                })
+
+        except Exception:
+            abort(404)
 
     return app
 
