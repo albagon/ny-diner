@@ -69,7 +69,6 @@ def create_app(test_config = None):
                     # We need to replace all single quotes with double quotes in
                     # order to make the data valid as a JSON string.
                     restaurant.latlng = restaurant.latlng.replace("\'", "\"")
-                    restaurant.operating_hours = restaurant.operating_hours.replace("\'", "\"")
                     restaurants_short.append(restaurant.short())
 
             return jsonify({
@@ -79,6 +78,30 @@ def create_app(test_config = None):
 
         except Exception:
             abort(404)
+
+    '''
+    GET /restaurants/<id>
+        It should be a public endpoint.
+        It should contain only the Restaurant.long() data representation.
+        On success, this endpoint returns status code 200 and
+        json {"success": True, "restaurant": restaurant}
+        where restaurant is the restaurant with the id requested.
+        On failure, it aborts with a 404 error code.
+    '''
+    @app.route('/restaurants/<int:id>')
+    def get_restaurant(id):
+        restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
+        if restaurant == None:
+            abort(404)
+        else:
+            # We need to replace all single quotes with double quotes in
+            # order to make the data valid as a JSON string.
+            restaurant.latlng = restaurant.latlng.replace("\'", "\"")
+            restaurant.operating_hours = restaurant.operating_hours.replace("\'", "\"")
+        return jsonify({
+                "success": True,
+                "restaurant": restaurant.long()
+            })
 
     return app
 
