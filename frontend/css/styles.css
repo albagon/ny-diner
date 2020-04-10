@@ -56,6 +56,10 @@ header, main, footer {
 	width: 100%;
 }
 
+header {
+  background-color: #252831;
+}
+
 #maincontent {
   background-color: #f3f3f3;
   min-height: 100%;
@@ -89,6 +93,12 @@ nav h1 a {
   letter-spacing: 7px;
   text-transform: uppercase;
   font-size: 12px;
+}
+
+#login-link {
+  float: right;
+  padding: 10px 40px;
+  background-color: #252831;
 }
 
 #breadcrumb {
