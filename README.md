@@ -55,17 +55,83 @@ a service worker that creates a seamless offline experience for the users.
 
 ### Backend
 
-The `./backend` directory contains a complete Flask-SQLAlchemy server with a set of
+This application features a complete Flask-SQLAlchemy server with a set of
 endpoints. Auth0 has been integrated for authentication.
 
-[View the README.md within ./backend for more details.](./backend/README.md)
+The original website sources its data from a JSON file but now, a new Postgresql
+Database has been integrated, along with other authentication features.
 
-### Frontend
+Two models are created in the database:
+1. Restaurants
+2. Reviews
 
-The `./frontend` directory contains a complete Javascript frontend to consume
-the data from the Flask server.
+### Auth0 Specifications
 
-[View the README.md within ./frontend for more details.](./frontend/README.md)
+1. Create a new Auth0 Account
+2. Select a unique tenant domain
+3. Create a new Regular Web Application
+4. Create a new API
+    - in API Settings:
+        - Enable RBAC
+        - Enable Add Permissions in the Access Token
+5. Create new API permissions:
+    - `post:restaurants`
+    - `post:reviews`
+    - `patch:restaurants`
+    - `delete:restaurants`
+    - `delete:reviews`
+6. Create new roles for:
+    - Diner
+        - can `post:reviews`
+    - Restaurateur
+        - can perform all Diner actions
+        - can `post:restaurants`, `patch:restaurants`
+    - App_admin
+        - can perform all Restaurateur actions
+        - can `delete:restaurants`, `delete:reviews`
+7. Create the `.env` file in the root of your app and add your Auth0 variables and values to it.
+```
+# .env
+AUTH0_CLIENT_ID=YOUR_AUTH0_CLIENT_ID
+AUTH0_DOMAIN=YOUR_AUTH0_DOMAIN
+AUTH0_CLIENT_SECRET=YOUR_CLIENT_SECRET
+```
+
+### Running the server
+
+Remember to “cd” into the application’s folder. To run the development server:
+
+1. Initialize and activate a virtual environment 
+```
+$ python3 -m venv env
+$  source env/bin/activate
+```
+2. Install the dependencies:
+```
+$ pip3 install -r requirements.txt
+```
+3. Run the development server:
+```
+$ export DATABASE_URL={the value of SQLALCHEMY_DATABASE_URI}
+$ export FLASK_APP=app.py
+$ export FLASK_DEBUG=True
+$ export FLASK_ENV=development
+$ flask run
+```
+4. Navigate to Home page [http://localhost:5000](http://localhost:5000)
+
+## Frontend
+
+Templates for login and logout have been added to this project.
+
+### Leaflet.js and Mapbox:
+
+This repository uses [leafletjs](https://leafletjs.com/) with [Mapbox](https://www.mapbox.com/).
+Mapbox is free to use, and does not require any payment information.
+
+### Note about ES6
+
+Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code. As much as possible, this repository will try to maintain use of ES6 in any additional JavaScript added to it.
 
 ## Contributing
 
