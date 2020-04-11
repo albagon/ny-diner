@@ -1,12 +1,105 @@
+from functools import wraps
+import json
 import os
-from flask import Flask, jsonify, abort
+from os import environ as env
+from werkzeug.exceptions import HTTPException
+
+from dotenv import load_dotenv, find_dotenv
+from flask import Flask, jsonify, redirect, render_template, session, url_for, abort
 from flask_cors import CORS
+from authlib.integrations.flask_client import OAuth
+from six.moves.urllib.parse import urlencode
 from datetime import datetime
+
 from models import setup_db, Restaurant, Review
 
 def create_app(test_config = None):
 
     app = Flask(__name__)
+
+    # Load environment variables from dot env file.
+    load_dotenv()
+
+    app.secret_key = os.getenv("AUTH0_CLIENT_SECRET")
+
+    '''
+    Auth0 settings
+    '''
+    oauth = OAuth(app)
+
+    auth0 = oauth.register(
+        'auth0',
+        client_id = os.getenv("AUTH0_CLIENT_ID"),
+        client_secret = os.getenv("AUTH0_CLIENT_SECRET"),
+        api_base_url = 'https://full.eu.auth0.com',
+        access_token_url = 'https://full.eu.auth0.com/oauth/token',
+        authorize_url = 'https://full.eu.auth0.com/authorize',
+        client_kwargs = {
+            'scope': 'openid profile email',
+        },
+    )
+
+    '''
+    Auth0 routes
+    '''
+    # Auth0 redirects the user to this route after they have authenticated.
+    @app.route('/callback')
+    def callback_handling():
+        # Handles response from token endpoint
+        auth0.authorize_access_token()
+        resp = auth0.get('userinfo')
+        userinfo = resp.json()
+
+        # Store the user information in flask session.
+        session['jwt_payload'] = userinfo
+        session['profile'] = {
+            'user_id': userinfo['sub'],
+            'name': userinfo['name'],
+            'picture': userinfo['picture']
+        }
+        return redirect('/dashboard')
+
+    # This route uses the Authlib client instance to redirect the user to the login page.
+    @app.route('/login')
+    def login():
+        return auth0.authorize_redirect(redirect_uri='http://localhost:5000/callback')
+
+    # Decorator that checks if the user has authenticated.
+    def requires_auth(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            if 'profile' not in session:
+                # Redirect to Login page here
+                return redirect('/')
+            return f(*args, **kwargs)
+
+        return decorated
+
+    # This route renders the user information stored in the Flask session.
+    @app.route('/dashboard')
+    @requires_auth
+    def dashboard():
+        return render_template('dashboard.html',
+                               userinfo=session['profile'],
+                               userinfo_pretty=json.dumps(session['jwt_payload'], indent=4))
+
+    # This route renders once the user has logged out.
+    @app.route('/')
+    def home():
+        return render_template('home.html')
+
+    # Log the user out and clear the data from the session.
+    @app.route('/logout')
+    def logout():
+        # Clear session stored data
+        session.clear()
+        # Redirect user to logout endpoint
+        params = {'returnTo': url_for('home', _external=True), 'client_id': os.getenv("AUTH0_CLIENT_ID")}
+        return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
+
+    '''
+    Database settings
+    '''
     setup_db(app)
     # Allow CORS for all domains on all routes
     CORS(app)
@@ -42,13 +135,7 @@ def create_app(test_config = None):
         comments = "This place is a blast.")
     my_review.insert()
 
-    ## ROUTES
-
-    @app.route('/')
-    def index():
-        healthy = os.environ['HEALTHY']
-        if healthy == 'true': print("Super healthy!")
-        return "Good progress!!"
+    ## ENDPOINTS
 
     '''
     GET /restaurants

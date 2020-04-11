@@ -12,7 +12,7 @@ var markers = []
  * 3. Fetch list of Boroughs and Cuisines
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  registerServiceWorker();
+  //registerServiceWorker();
   initMap();
   fetchFilters();
 });

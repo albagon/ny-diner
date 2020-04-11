@@ -1,6 +1,8 @@
 /**
  * Common database helper functions.
  */
+const PORT = 5000 // Change this to your server port
+
 class DBHelper {
 
   /**
@@ -8,13 +10,11 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    const port = 8000 // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+    return `http://localhost:${PORT}/static/data/restaurants.json`;
   }
 
   static get DATABASE_URL_FILTERS() {
-    const port = 8000 // Change this to your server port
-    return `http://localhost:${port}/data/filters.json`;
+    return `http://localhost:${PORT}/static/data/filters.json`;
   }
 
   /**
@@ -133,14 +133,14 @@ class DBHelper {
    * Restaurant page URL.
    */
   static urlForRestaurant(restaurant) {
-    return (`./restaurant.html?id=${restaurant.id}`);
+    return (`/restaurants/${restaurant.id}`);
   }
 
   /**
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}`);
+    return (`/static/img/${restaurant.photograph}`);
   }
 
   /**

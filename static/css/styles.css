@@ -95,12 +95,6 @@ nav h1 a {
   font-size: 12px;
 }
 
-#login-link {
-  float: right;
-  padding: 10px 40px;
-  background-color: #252831;
-}
-
 #breadcrumb {
   padding: 10px 40px;
   list-style: none;
