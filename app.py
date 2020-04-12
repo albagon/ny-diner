@@ -23,6 +23,13 @@ def create_app(test_config = None):
     app.secret_key = os.getenv("AUTH0_CLIENT_SECRET")
 
     '''
+    Database settings
+    '''
+    setup_db(app)
+    # Allow CORS for all domains on all routes
+    CORS(app)
+
+    '''
     Auth0 settings
     '''
     oauth = OAuth(app)
@@ -97,12 +104,6 @@ def create_app(test_config = None):
         params = {'returnTo': url_for('home', _external=True), 'client_id': os.getenv("AUTH0_CLIENT_ID")}
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
-    '''
-    Database settings
-    '''
-    setup_db(app)
-    # Allow CORS for all domains on all routes
-    CORS(app)
 
     # Insert records so we can test our class methods and db
     chinese = Restaurant(
