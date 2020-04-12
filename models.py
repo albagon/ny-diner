@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import Column, String, Integer, DateTime, create_engine
+from sqlalchemy import Column, String, Integer, Float, DateTime, ARRAY, JSON, create_engine
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import json
@@ -39,9 +39,9 @@ class Restaurant(db.Model):
     photograph = Column(String, nullable = False)
     img_description = Column(String, nullable = False)
     address = Column(String, nullable = False)
-    latlng = Column(String, nullable = False)
+    latlng = Column(ARRAY(Float), nullable = False)
     cuisine = Column(String, nullable = False)
-    operating_hours = Column(String, nullable = False)
+    operating_hours = Column(JSON, nullable = False)
     reviews = db.relationship('Review', backref='restaurant', lazy=True)
 
     def __init__(self, name, borough, photograph, img_description, address,
@@ -98,12 +98,9 @@ class Restaurant(db.Model):
                 photograph = "1.jpg",
                 img_description = "An inside view",
                 address = "171 E Broadway, New York, NY 10002",
-                latlng = str({
-                  "lat": 40.713829,
-                  "lng": -73.989667
-                }),
+                latlng = [40.713829, -73.989667],
                 cuisine = "Chinese",
-                operating_hours = str({
+                operating_hours = {
                   "Monday": "5:30 pm - 11:00 pm",
                   "Tuesday": "5:30 pm - 12:00 am",
                   "Wednesday": "5:30 pm - 12:00 am",
@@ -111,7 +108,7 @@ class Restaurant(db.Model):
                   "Friday": "5:30 pm - 12:00 am",
                   "Saturday": "12:00 pm - 4:00 pm, 5:30 pm - 12:00 am",
                   "Sunday": "12:00 pm - 4:00 pm, 5:30 pm - 11:00 pm"
-                }))
+                })
             chinese.insert()
     '''
     def insert(self):

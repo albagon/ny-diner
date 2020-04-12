@@ -111,12 +111,9 @@ def create_app(test_config = None):
         photograph = "1.jpg",
         img_description = "An inside view of a busy restaurant with all tables ocupied by people enjoying their meal",
         address = "171 E Broadway, New York, NY 10002",
-        latlng = str({
-          "lat": 40.713829,
-          "lng": -73.989667
-        }),
+        latlng = [40.713829, -73.989667],
         cuisine = "Chinese",
-        operating_hours = str({
+        operating_hours = {
           "Monday": "5:30 pm - 11:00 pm",
           "Tuesday": "5:30 pm - 12:00 am",
           "Wednesday": "5:30 pm - 12:00 am",
@@ -124,7 +121,7 @@ def create_app(test_config = None):
           "Friday": "5:30 pm - 12:00 am",
           "Saturday": "12:00 pm - 4:00 pm, 5:30 pm - 12:00 am",
           "Sunday": "12:00 pm - 4:00 pm, 5:30 pm - 11:00 pm"
-        }))
+        })
     chinese.insert()
 
     my_review = Review(
@@ -155,7 +152,7 @@ def create_app(test_config = None):
                 for restaurant in restaurants:
                     # We need to replace all single quotes with double quotes in
                     # order to make the data valid as a JSON string.
-                    restaurant.latlng = restaurant.latlng.replace("\'", "\"")
+                    # restaurant.latlng = restaurant.latlng.replace("\'", "\"")
                     restaurants_short.append(restaurant.short())
 
             return jsonify({
@@ -178,17 +175,14 @@ def create_app(test_config = None):
     @app.route('/restaurants/<int:id>')
     def get_restaurant(id):
         restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
+        db_response = ' '
         if restaurant == None:
             abort(404)
-        else:
-            # We need to replace all single quotes with double quotes in
-            # order to make the data valid as a JSON string.
-            restaurant.latlng = restaurant.latlng.replace("\'", "\"")
-            restaurant.operating_hours = restaurant.operating_hours.replace("\'", "\"")
-        return jsonify({
-                "success": True,
-                "restaurant": restaurant.long()
-            })
+
+        return render_template('restaurant.html',
+                                   restaurant=restaurant.long(),
+                                   success=True,
+                                   domain=os.getenv("APP_DOMAIN"))
 
     return app
 

@@ -9,7 +9,7 @@
   <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <!-- Main CSS file -->
-  <link rel="stylesheet" href="static/css/styles.css">
+  <link rel="stylesheet" href="{{domain}}/static/css/styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
 </head>
 
@@ -18,10 +18,11 @@
   <header>
     <!-- Beginning nav -->
     <nav aria-label="Breadcrumb">
-      <h1><a href="/">New York Diner</a></h1>
+      <h1><a href="{{domain}}/dashboard">New York Diner</a></h1>
       <!-- Beginning breadcrumb -->
       <ol id="breadcrumb">
-        <li><a href="/">Home</a></li>
+        <li><a href="{{domain}}/dashboard">Home</a></li>
+        <li aria-current="page">{{restaurant.name}}</li>
       </ol>
       <!-- End breadcrumb -->
     </nav>
@@ -33,16 +34,23 @@
   <main id="maincontent">
     <!-- Beginning map -->
     <section id="map-container">
-      <div id="map" role="application"></div>
+      <div id="map" role="application" data-restaurant='{{ restaurant|tojson }}'></div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
-      <h2 id="restaurant-name"></h2>
-      <img id="restaurant-img">
-      <p id="restaurant-cuisine"></p>
-      <p id="restaurant-address"></p>
-      <table id="restaurant-hours"></table>
+      <h2 id="restaurant-name">{{restaurant.name}}</h2>
+      <img id="restaurant-img" class="restaurant-img" src="{{domain}}/static/img/{{restaurant.photograph}}" alt="Image of {{restaurant.name}} Restaurant">
+      <p id="restaurant-cuisine">{{restaurant.cuisine}}</p>
+      <p id="restaurant-address">{{restaurant.address}}</p>
+      <table id="restaurant-hours">
+        {% for key, value in restaurant.operating_hours.items() %}
+        <tr>
+          <td>{{key}}</td>
+          <td>{{value}}</td>
+        </tr>
+        {% endfor %}
+      </table>
     </section>
     <!-- end restaurant -->
     <!-- Beginning reviews -->
@@ -55,15 +63,15 @@
 
   <!-- Beginning footer -->
   <footer id="footer">
-    Copyright (c) 2020 <a href="/"><strong>New York Diner</strong></a> All Rights Reserved.
+    Copyright (c) 2020 <a href="{{domain}}/dashboard"><strong>New York Diner</strong></a> All Rights Reserved.
   </footer>
   <!-- End footer -->
   <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
   <!-- Beginning scripts -->
   <!-- Database helpers -->
-  <script src="static/js/dbhelper.js"></script>
+  <script src="{{domain}}/static/js/dbhelper.js"></script>
   <!-- Main javascript file -->
-  <script src="static/js/restaurant_info.js"></script>
+  <script src="{{domain}}/static/js/restaurant_info.js"></script>
   <!-- Google Maps -->
  <!--  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_tKbW6A5pQ-eupxI56myUnHLqYCzOjKo&libraries=places&callback=initMap"></script> -->
   <!-- End scripts -->
