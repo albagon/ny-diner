@@ -55,7 +55,23 @@
     <!-- end restaurant -->
     <!-- Beginning reviews -->
     <section id="reviews-container">
-      <ul id="reviews-list"></ul>
+      <h2>Reviews</h2>
+      <ul id="reviews-list">
+        {% if reviews is false %}
+          <li>
+            <p>No reviews yet.</p>
+          </li>
+        {% else %}
+          {% for review in reviews %}
+            <li>
+              <p>{{review.name}}</p>
+              <p>{{review.date}}</p>
+              <p>Rating: {{review.rating}}</p>
+              <p>{{review.comments}}</p>
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
     </section>
     <!-- End reviews -->
   </main>

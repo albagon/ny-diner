@@ -104,8 +104,9 @@ def create_app(test_config = None):
         params = {'returnTo': url_for('home', _external=True), 'client_id': os.getenv("AUTH0_CLIENT_ID")}
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
-
-    # Insert records so we can test our class methods and db
+    '''
+    INSERT records so we can test our class methods and db
+    '''
     chinese = Restaurant(
         name = "Mission Chinese Food",
         borough = "Manhattan",
@@ -130,10 +131,20 @@ def create_app(test_config = None):
         name = "Morgan",
         date = datetime.today(),
         rating = 4,
-        comments = "This place is a blast.")
+        comments = "Mission Chinese Food has grown up from its scrappy Orchard Street days into a big, two story restaurant equipped with a pizza oven, a prime rib cart, and a much broader menu. Yes, it still has all the hits — the kung pao pastrami, the thrice cooked bacon —but chef/proprietor Danny Bowien and executive chef Angela Dimayuga have also added a raw bar, two generous family-style set menus, and showstoppers like duck baked in clay. And you can still get a lot of food without breaking the bank.")
     my_review.insert()
 
-    ## ENDPOINTS
+    second_review = Review(
+        restaurant_id = 1,
+        name = "Alba",
+        date = datetime.today(),
+        rating = 4,
+        comments = "Mission Chinese Food has grown up from its scrappy Orchard Street days into a big, two story restaurant equipped with a pizza oven, a prime rib cart, and a much broader menu. Yes, it still has all the hits — the kung pao pastrami, the thrice cooked bacon —but chef/proprietor Danny Bowien and executive chef Angela Dimayuga have also added a raw bar, two generous family-style set menus, and showstoppers like duck baked in clay. And you can still get a lot of food without breaking the bank.")
+    second_review.insert()
+
+    '''
+    ENDPOINTS
+    '''
 
     '''
     GET /restaurants
@@ -167,23 +178,29 @@ def create_app(test_config = None):
     '''
     GET /restaurants/<id>
         It should be a public endpoint.
-        It should contain only the Restaurant.long() data representation.
-        On success, this endpoint returns status code 200 and
-        json {"success": True, "restaurant": restaurant}
-        where restaurant is the restaurant with the id requested.
-        On failure, it aborts with a 404 error code.
+        It should contain the Restaurant.long() data representation.
+        On success, this endpoint returns status code 200, the restaurant data,
+        a list of reviews on that restaurant and the APP_DOMAIN environment
+        variable. On failure, it aborts with a 404 error code.
     '''
     @app.route('/restaurants/<int:id>')
     def get_restaurant(id):
         restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
-        db_response = ' '
         if restaurant == None:
             abort(404)
-
+        reviews = Review.query.filter(Review.restaurant_id == id).all()
+        if len(reviews) != 0:
+            reviews_format = []
+            for review in reviews:
+                reviews_format.append(review.format())
+        else:
+            reviews_format = False
         return render_template('restaurant.html',
-                                   restaurant=restaurant.long(),
                                    success=True,
+                                   restaurant=restaurant.long(),
+                                   reviews=reviews_format,
                                    domain=os.getenv("APP_DOMAIN"))
+
 
     return app
 
