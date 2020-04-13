@@ -1,4 +1,5 @@
 let restaurants,
+  currentRestaurants,
   boroughs,
   cuisines
 var newMap
@@ -13,8 +14,11 @@ var markers = []
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   //registerServiceWorker();
-  initMap();
+  // restaurants variable contains the list of all the restaurants stored
+  // in the db.
+  self.restaurants = JSON.parse(document.getElementById("map").dataset.restaurants);
   fetchFilters();
+  initMap();
 });
 
 /**
@@ -114,19 +118,19 @@ initMap = () => {
  */
 updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
-  const nSelect = document.getElementById('boroughs-select');
+  const bSelect = document.getElementById('boroughs-select');
 
   const cIndex = cSelect.selectedIndex;
-  const nIndex = nSelect.selectedIndex;
+  const bIndex = bSelect.selectedIndex;
 
   const cuisine = cSelect[cIndex].value;
-  const borough = nSelect[nIndex].value;
+  const borough = bSelect[bIndex].value;
 
-  DBHelper.fetchRestaurantByCuisineAndBorough(cuisine, borough, (error, restaurants) => {
+  DBHelper.fetchRestaurantByCuisineAndBorough(self.restaurants, cuisine, borough, (error, currentRestaurants) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      resetRestaurants(restaurants);
+      resetRestaurants(currentRestaurants);
       fillRestaurantsHTML();
     }
   })
@@ -137,7 +141,7 @@ updateRestaurants = () => {
  */
 resetRestaurants = (restaurants) => {
   // Remove all restaurants
-  self.restaurants = [];
+  self.currentRestaurants = [];
   const ul = document.getElementById('restaurants-list');
   ul.innerHTML = '';
 
@@ -146,13 +150,13 @@ resetRestaurants = (restaurants) => {
     self.markers.forEach(marker => marker.remove());
   }
   self.markers = [];
-  self.restaurants = restaurants;
+  self.currentRestaurants = restaurants;
 }
 
 /**
  * Create all restaurants HTML and add them to the webpage.
  */
-fillRestaurantsHTML = (restaurants = self.restaurants) => {
+fillRestaurantsHTML = (restaurants = self.currentRestaurants) => {
   const ul = document.getElementById('restaurants-list');
   ul.setAttribute('aria-label', 'restaurants list');
   restaurants.forEach(restaurant => {
@@ -182,10 +186,6 @@ createRestaurantHTML = (restaurant = self.restaurant) => {
   borough.innerHTML = restaurant.borough;
   li.append(borough);
 
-  const address = document.createElement('p');
-  address.innerHTML = restaurant.address;
-  li.append(address);
-
   const more = document.createElement('a');
   more.setAttribute('aria-label', restaurant.name+' view details');
   more.innerHTML = 'View Details';
@@ -198,7 +198,7 @@ createRestaurantHTML = (restaurant = self.restaurant) => {
 /**
  * Add markers for current restaurants to the map.
  */
-addMarkersToMap = (restaurants = self.restaurants) => {
+addMarkersToMap = (restaurants = self.currentRestaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.newMap);

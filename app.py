@@ -64,7 +64,7 @@ def create_app(test_config = None):
             'name': userinfo['name'],
             'picture': userinfo['picture']
         }
-        return redirect('/dashboard')
+        return redirect('/restaurants')
 
     # This route uses the Authlib client instance to redirect the user to the login page.
     @app.route('/login')
@@ -83,12 +83,14 @@ def create_app(test_config = None):
         return decorated
 
     # This route renders the user information stored in the Flask session.
+    '''
     @app.route('/dashboard')
     @requires_auth
     def dashboard():
         return render_template('dashboard.html',
                                userinfo=session['profile'],
                                userinfo_pretty=json.dumps(session['jwt_payload'], indent=4))
+    '''
 
     # This route renders once the user has logged out.
     @app.route('/')
@@ -121,10 +123,29 @@ def create_app(test_config = None):
           "Wednesday": "5:30 pm - 12:00 am",
           "Thursday": "5:30 pm - 12:00 am",
           "Friday": "5:30 pm - 12:00 am",
-          "Saturday": "12:00 pm - 4:00 pm, 5:30 pm - 12:00 am",
-          "Sunday": "12:00 pm - 4:00 pm, 5:30 pm - 11:00 pm"
+          "Saturday": "12:00 pm - 4:00 pm",
+          "Sunday": "12:00 pm - 4:00 pm"
         })
     chinese.insert()
+
+    korean = Restaurant(
+        name = "Kang Ho Dong Baekjeong",
+        borough = "Manhattan",
+        photograph = "3.jpg",
+        img_description = "An inside view of an empty restaurant. There is a steam pot in the middle of each table",
+        address = "1 E 32nd St, New York, NY 10016",
+        latlng = [40.747143, -73.985414],
+        cuisine = "Korean",
+        operating_hours = {
+          "Monday": "11:30 am - 2:00 am",
+          "Tuesday": "11:30 am - 2:00 am",
+          "Wednesday": "11:30 am - 2:00 am",
+          "Thursday": "11:30 am - 2:00 am",
+          "Friday": "11:30 am - 6:00 am",
+          "Saturday": "11:30 am - 6:00 am",
+          "Sunday": "11:30 am - 2:00 am"
+        })
+    korean.insert()
 
     my_review = Review(
         restaurant_id = 1,
@@ -148,30 +169,27 @@ def create_app(test_config = None):
 
     '''
     GET /restaurants
-        It should be a public endpoint.
+        It requires authentication.
         It should contain only the Restaurant.short() data representation.
-        On success, this endpoint returns status code 200 and
-        json {"success": True, "restaurants": restaurants}
-        where restaurants is the list of restaurants.
-        On failure, it aborts with a 404 error code.
+        On success, this endpoint returns status code 200 and the list of
+        restaurants. On failure, it aborts with a 404 error code.
+        This route also returns the user information stored in the Flask session.
     '''
     @app.route('/restaurants')
+    @requires_auth
     def get_restaurants():
         try:
             restaurants = Restaurant.query.all()
             restaurants_short = []
             if len(restaurants) != 0:
+                any_restaurants = True
                 for restaurant in restaurants:
-                    # We need to replace all single quotes with double quotes in
-                    # order to make the data valid as a JSON string.
-                    # restaurant.latlng = restaurant.latlng.replace("\'", "\"")
                     restaurants_short.append(restaurant.short())
-
-            return jsonify({
-                    "success": True,
-                    "restaurants": restaurants_short
-                })
-
+            return render_template('dashboard.html',
+                                       userinfo=session['profile'],
+                                       userinfo_pretty=json.dumps(session['jwt_payload'], indent=4),
+                                       success=True,
+                                       restaurants=restaurants_short)
         except Exception:
             abort(404)
 

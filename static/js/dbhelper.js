@@ -37,56 +37,22 @@ class DBHelper {
   }
 
   /**
-   * Fetch restaurants by a cuisine type with proper error handling.
+   * Fetch restaurants by a cuisine and a borough with error handling.
    */
-  static fetchRestaurantByCuisine(cuisine, callback) {
-    // Fetch all restaurants  with proper error handling
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Filter restaurants to have only given cuisine type
-        const results = restaurants.filter(r => r.cuisine_type == cuisine);
-        callback(null, results);
-      }
-    });
-  }
 
-  /**
-   * Fetch restaurants by a borough with proper error handling.
-   */
-  static fetchRestaurantByBorough(borough, callback) {
-    // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Filter restaurants to have only given borough
-        const results = restaurants.filter(r => r.borough == borough);
-        callback(null, results);
+  static fetchRestaurantByCuisineAndBorough(restaurants, cuisine, borough, callback) {
+    if (restaurants.length == 0) {
+      callback('No restaurants to display', null);
+    } else {
+      let results = restaurants
+      if (cuisine != 'all') { // filter by cuisine
+        results = results.filter(r => r.cuisine == cuisine);
       }
-    });
-  }
-
-  /**
-   * Fetch restaurants by a cuisine and a borough with proper error handling.
-   */
-  static fetchRestaurantByCuisineAndBorough(cuisine, borough, callback) {
-    // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        let results = restaurants
-        if (cuisine != 'all') { // filter by cuisine
-          results = results.filter(r => r.cuisine_type == cuisine);
-        }
-        if (borough != 'all') { // filter by borough
-          results = results.filter(r => r.borough == borough);
-        }
-        callback(null, results);
+      if (borough != 'all') { // filter by borough
+        results = results.filter(r => r.borough == borough);
       }
-    });
+      callback(null, results);
+    }
   }
 
   /**
