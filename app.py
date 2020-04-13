@@ -12,6 +12,7 @@ from six.moves.urllib.parse import urlencode
 from datetime import datetime
 
 from models import setup_db, Restaurant, Review
+from data import populate_db
 
 def create_app(test_config = None):
 
@@ -82,16 +83,6 @@ def create_app(test_config = None):
 
         return decorated
 
-    # This route renders the user information stored in the Flask session.
-    '''
-    @app.route('/dashboard')
-    @requires_auth
-    def dashboard():
-        return render_template('dashboard.html',
-                               userinfo=session['profile'],
-                               userinfo_pretty=json.dumps(session['jwt_payload'], indent=4))
-    '''
-
     # This route renders once the user has logged out.
     @app.route('/')
     def home():
@@ -107,61 +98,9 @@ def create_app(test_config = None):
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
     '''
-    INSERT records so we can test our class methods and db
+    INSERT records so we can test our methods and db
     '''
-    chinese = Restaurant(
-        name = "Mission Chinese Food",
-        borough = "Manhattan",
-        photograph = "1.jpg",
-        img_description = "An inside view of a busy restaurant with all tables ocupied by people enjoying their meal",
-        address = "171 E Broadway, New York, NY 10002",
-        latlng = [40.713829, -73.989667],
-        cuisine = "Chinese",
-        operating_hours = {
-          "Monday": "5:30 pm - 11:00 pm",
-          "Tuesday": "5:30 pm - 12:00 am",
-          "Wednesday": "5:30 pm - 12:00 am",
-          "Thursday": "5:30 pm - 12:00 am",
-          "Friday": "5:30 pm - 12:00 am",
-          "Saturday": "12:00 pm - 4:00 pm",
-          "Sunday": "12:00 pm - 4:00 pm"
-        })
-    chinese.insert()
-
-    korean = Restaurant(
-        name = "Kang Ho Dong Baekjeong",
-        borough = "Manhattan",
-        photograph = "3.jpg",
-        img_description = "An inside view of an empty restaurant. There is a steam pot in the middle of each table",
-        address = "1 E 32nd St, New York, NY 10016",
-        latlng = [40.747143, -73.985414],
-        cuisine = "Korean",
-        operating_hours = {
-          "Monday": "11:30 am - 2:00 am",
-          "Tuesday": "11:30 am - 2:00 am",
-          "Wednesday": "11:30 am - 2:00 am",
-          "Thursday": "11:30 am - 2:00 am",
-          "Friday": "11:30 am - 6:00 am",
-          "Saturday": "11:30 am - 6:00 am",
-          "Sunday": "11:30 am - 2:00 am"
-        })
-    korean.insert()
-
-    my_review = Review(
-        restaurant_id = 1,
-        name = "Morgan",
-        date = datetime.today(),
-        rating = 4,
-        comments = "Mission Chinese Food has grown up from its scrappy Orchard Street days into a big, two story restaurant equipped with a pizza oven, a prime rib cart, and a much broader menu. Yes, it still has all the hits — the kung pao pastrami, the thrice cooked bacon —but chef/proprietor Danny Bowien and executive chef Angela Dimayuga have also added a raw bar, two generous family-style set menus, and showstoppers like duck baked in clay. And you can still get a lot of food without breaking the bank.")
-    my_review.insert()
-
-    second_review = Review(
-        restaurant_id = 1,
-        name = "Alba",
-        date = datetime.today(),
-        rating = 4,
-        comments = "Mission Chinese Food has grown up from its scrappy Orchard Street days into a big, two story restaurant equipped with a pizza oven, a prime rib cart, and a much broader menu. Yes, it still has all the hits — the kung pao pastrami, the thrice cooked bacon —but chef/proprietor Danny Bowien and executive chef Angela Dimayuga have also added a raw bar, two generous family-style set menus, and showstoppers like duck baked in clay. And you can still get a lot of food without breaking the bank.")
-    second_review.insert()
+    populate_db()
 
     '''
     ENDPOINTS
