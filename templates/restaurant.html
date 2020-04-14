@@ -17,13 +17,23 @@
   <!-- Beginning header -->
   <header>
     <!-- Beginning nav -->
-    <nav aria-label="Breadcrumb">
-      <h1><a href="{{domain}}/restaurants">New York Diner</a></h1>
+    <nav>
+      <div class="new-nav">
+        <div class="app-title">
+          <h1 class="title"><a href="/restaurants">New York Diner</a></h1>
+        </div>
+        <div class="user-info">
+          <p>Welcome {{userinfo['name']}}</p>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
       <!-- Beginning breadcrumb -->
-      <ol id="breadcrumb">
-        <li><a href="{{domain}}/restaurants">Home</a></li>
-        <li aria-current="page">{{restaurant.name}}</li>
-      </ol>
+      <div aria-label="Breadcrumb">
+        <ol id="breadcrumb">
+          <li><a href="{{domain}}/restaurants">Home</a></li>
+          <li aria-current="page">{{restaurant.name}}</li>
+        </ol>
+      </div>
       <!-- End breadcrumb -->
     </nav>
     <!-- End nav -->

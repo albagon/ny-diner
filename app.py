@@ -139,6 +139,7 @@ def create_app(test_config = None):
         On success, this endpoint returns status code 200, the restaurant data,
         a list of reviews on that restaurant and the APP_DOMAIN environment
         variable. On failure, it aborts with a 404 error code.
+        This route also returns the user information stored in the Flask session.
     '''
     @app.route('/restaurants/<int:id>')
     def get_restaurant(id):
@@ -154,6 +155,7 @@ def create_app(test_config = None):
             reviews_format = False
         return render_template('restaurant.html',
                                    success=True,
+                                   userinfo=session['profile'],
                                    restaurant=restaurant.long(),
                                    reviews=reviews_format,
                                    domain=os.getenv("APP_DOMAIN"))

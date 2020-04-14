@@ -15,14 +15,14 @@
 <body>
   <header>
     <nav>
-      <div class="app-title">
-        <h1><a href="/restaurants">New York Diner</a></h1>
-      </div>
-      <div>
-        <img class="avatar" src="{{userinfo['picture']}}"/>
-        <h2>Welcome {{userinfo['name']}}</h2>
-        <pre>{{userinfo_pretty}}</pre>
-        <a class="btn btn-primary btn-lg btn-logout btn-block" href="/logout">Logout</a>
+      <div class="new-nav">
+        <div class="app-title">
+          <h1 class="title"><a href="/restaurants">New York Diner</a></h1>
+        </div>
+        <div class="user-info">
+          <p>Welcome {{userinfo['name']}}</p>
+          <a href="/logout">Logout</a>
+        </div>
       </div>
     </nav>
   </header>

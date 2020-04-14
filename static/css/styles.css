@@ -49,9 +49,6 @@ h1, h2, h3, h4, h5, h6 {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-}
-
 header, main, footer {
 	width: 100%;
 }
@@ -76,23 +73,40 @@ header {
 }
 
 /* ====================== Navigation ====================== */
-nav {
+.new-nav {
   width: 100%;
   background-color: #252831;
-  text-align:center;
+  display: flex;
 }
 
-nav h1 {
+.app-title {
+  width: 50%;
+}
+
+.title {
   margin: auto;
-	padding: 20px 0;
+  padding: 20px;
 }
 
-nav h1 a {
+.title a {
 	color: #fff;
   font-weight: 200;
   letter-spacing: 7px;
   text-transform: uppercase;
   font-size: 12px;
+}
+
+.user-info {
+  display: block;
+  text-align: right;
+  vertical-align: bottom;
+  width: 50%;
+  padding: 20px 20px 10px 0;
+}
+
+.user-info p {
+  margin: 0;
+  color: white;
 }
 
 #breadcrumb {
@@ -382,10 +396,11 @@ nav h1 a {
 
 /* This media query makes the map taller in tablets */
 @media screen and (min-width: 32em) {
-  nav h1 a {
+  .title a {
     letter-spacing: 10px;
     font-size: 14pt;
   }
+
   #map {
     height: 400px;
   }
