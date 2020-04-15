@@ -137,8 +137,8 @@ def create_app(test_config = None):
         It should be a public endpoint.
         It should contain the Restaurant.long() data representation.
         On success, this endpoint returns status code 200, the restaurant data,
-        a list of reviews on that restaurant and the APP_DOMAIN environment
-        variable. On failure, it aborts with a 404 error code.
+        and a list of reviews on that restaurant.
+        On failure, it aborts with a 404 error code.
         This route also returns the user information stored in the Flask session.
     '''
     @app.route('/restaurants/<int:id>')
@@ -157,8 +157,23 @@ def create_app(test_config = None):
                                    success=True,
                                    userinfo=session['profile'],
                                    restaurant=restaurant.long(),
-                                   reviews=reviews_format,
-                                   domain=os.getenv("APP_DOMAIN"))
+                                   reviews=reviews_format)
+
+    '''
+    GET /restaurants/<id>/reviews
+        Renders the template associated with the new_review form.
+    '''
+    @app.route('/restaurants/<int:id>/reviews', methods=['GET'])
+    @requires_auth
+    def create_review_form(id):
+        restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
+        if restaurant == None:
+            abort(404)
+        #form = ReviewForm()
+        #return render_template('forms/new_review.html', form=form)
+        return render_template('forms/new_review.html',
+                                 userinfo=session['profile'],
+                                 restaurant=restaurant)
 
 
     return app

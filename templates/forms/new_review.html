@@ -1,0 +1,21 @@
+{% extends 'layouts/main.html' %}
+{% block title %}New Review{% endblock %}
+{% block description %}
+  <meta name="description" content="Write a review on your dining experience at one of New York's popular restaurants.">
+{% endblock %}
+{% block links %}{% endblock %}
+{% block breadcrumb %}
+  <div aria-label="Breadcrumb">
+    <ol id="breadcrumb">
+      <li><a href="/restaurants">Home</a></li>
+      <li><a href="/restaurants/{{restaurant.id}}">{{restaurant.name}}</a></li>
+      <li aria-current="page">Write a Review</li>
+    </ol>
+  </div>
+{% endblock %}
+{% block content %}
+  <div class="form-wrapper">
+    This is the content block
+  </div>
+{% endblock %}
+{% block scripts %}{% endblock %}
