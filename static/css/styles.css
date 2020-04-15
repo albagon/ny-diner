@@ -259,7 +259,7 @@ header {
 }
 
 .inside main {
-	margin-top: 115px;
+	margin-top: 150px;
 }
 
 .inside #map-container {
@@ -409,6 +409,10 @@ header {
   .title a {
     letter-spacing: 3px;
     font-size: 14pt;
+  }
+
+  .inside main {
+  	margin-top: 115px;
   }
 
   #map {
