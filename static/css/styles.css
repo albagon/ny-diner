@@ -72,6 +72,16 @@ header {
   text-transform: uppercase;
 }
 
+.login-wrapper {
+  width: 100%;
+}
+
+.login-prompt {
+  width: 100%;
+  text-align: center;
+  padding-top: 100px;
+}
+
 /* ====================== Navigation ====================== */
 .new-nav {
   width: 100%;
