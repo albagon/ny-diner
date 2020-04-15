@@ -142,6 +142,7 @@ def create_app(test_config = None):
         This route also returns the user information stored in the Flask session.
     '''
     @app.route('/restaurants/<int:id>')
+    @requires_auth
     def get_restaurant(id):
         restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
         if restaurant == None:
