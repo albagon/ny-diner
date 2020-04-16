@@ -15,7 +15,26 @@
 {% endblock %}
 {% block content %}
   <div class="form-wrapper">
-    This is the content block
+    <form method="post" class="form">
+      <h3 class="form-heading">{{restaurant.name}}</h3>
+      <div class="form-group">
+        <img class="avatar" src="{{userinfo['picture']}}" alt="Avatar"/>
+        <p>{{userinfo['name']}}</p>
+      </div>
+      <div style="display: none;">
+        {{ form.name(class_ = 'form-control', autofocus = true, value = userinfo['name']) }}
+        {{ form.date(class_ = 'form-control', placeholder='YYYY-MM-DD HH:MM', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="rating">Rating</label>
+        {{ form.rating(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="comments">Comments</label>
+        {{ form.comments(class_ = 'form-control', placeholder='Share your experience at this restaurant', autofocus = true, maxlength=500) }}
+      </div>
+      <input type="submit" value="Post" class="submit-btn">
+    </form>
   </div>
 {% endblock %}
 {% block scripts %}{% endblock %}

@@ -3,6 +3,7 @@ flask_cors
 sqlalchemy
 psycopg2
 flask_sqlalchemy
+flask_wtf
 python-dotenv
 requests
 authlib

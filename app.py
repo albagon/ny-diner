@@ -5,14 +5,16 @@ from os import environ as env
 from werkzeug.exceptions import HTTPException
 
 from dotenv import load_dotenv, find_dotenv
-from flask import Flask, jsonify, redirect, render_template, session, url_for, abort
+from flask import Flask, jsonify, redirect, render_template, session, url_for, abort, flash, request
 from flask_cors import CORS
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 from datetime import datetime
+import sys
 
-from models import setup_db, Restaurant, Review
+from models import db, setup_db, Restaurant, Review
 from data import populate_db
+from forms import *
 
 def create_app(test_config = None):
 
@@ -170,12 +172,44 @@ def create_app(test_config = None):
         restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
         if restaurant == None:
             abort(404)
-        #form = ReviewForm()
-        #return render_template('forms/new_review.html', form=form)
+        form = ReviewForm()
         return render_template('forms/new_review.html',
                                  userinfo=session['profile'],
-                                 restaurant=restaurant)
+                                 restaurant=restaurant,
+                                 form=form)
 
+    '''
+    POST /restaurants/<id>/reviews
+        Renders the template associated with the new_review form.
+    '''
+    @app.route('/restaurants/<int:id>/reviews', methods=['POST'])
+    @requires_auth
+    def create_review_submission(id):
+        error = False
+        body = {}
+        try:
+            form = request.form
+            review = Review(
+                restaurant_id = id,
+                name = form['name'],
+                date = form['date'],
+                rating = form['rating'],
+                comments = form['comments']
+            )
+            review.insert()
+            body['name'] = form['name']
+        except:
+            error = True
+            db.session.rollback()
+            print(sys.exc_info())
+        finally:
+            db.session.close()
+        if not error:
+            # on successful db insert, flash success
+            flash('Thank you ' + body['name'] + ' for your review.')
+        else:
+            flash('Sorry. Your review was NOT successfully saved!')
+        return redirect('/restaurants/'+str(id)+'/reviews')
 
     return app
 
