@@ -17,7 +17,7 @@ class ReviewForm(Form):
     )
     rating = SelectField(
         'rating', validators=[DataRequired()],
-        choices=[(0, "1"), (1, "2"), (2, "3"), (3, "4"), (4, "5")]
+        choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")]
     )
     comments = TextAreaField(
         'comments', validators=[DataRequired()]
