@@ -65,8 +65,10 @@
     <!-- end restaurant -->
     <!-- Beginning reviews -->
     <section id="reviews-container">
-      <h2>Reviews</h2>
-      <a href="{{ url_for('create_review_form', id=restaurant.id) }}">Write a review</a>
+      <div class="reviews-heading">
+        <h2>Reviews</h2>
+        <span><a href="{{ url_for('create_review_form', id=restaurant.id) }}" class="link-btn">Write a review</a></span>
+      </div>
       <ul id="reviews-list">
         {% if reviews is false %}
           <li>
