@@ -50,7 +50,7 @@
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
       <h2 id="restaurant-name">{{restaurant.name}}</h2>
-      <img id="restaurant-img" class="restaurant-img" src="{{ url_for('static', filename='img/') }}{{restaurant.photograph}}" alt="Image of {{restaurant.name}} Restaurant">
+      <img id="restaurant-img" class="restaurant-img" src="{{restaurant.photograph}}" alt="Image of {{restaurant.name}} Restaurant">
       <p id="restaurant-cuisine">{{restaurant.cuisine}}</p>
       <p id="restaurant-address">{{restaurant.address}}</p>
       <table id="restaurant-hours">

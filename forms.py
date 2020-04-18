@@ -33,7 +33,7 @@ class RestaurantForm(Form):
         choices=Borough.getBoroughs()
     )
     photograph = StringField(
-        'photograph', validators=[DataRequired()]
+        'photograph', validators=[DataRequired(), URL()]
     )
     img_description = StringField(
         'img_description', validators=[DataRequired()]
