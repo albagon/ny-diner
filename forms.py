@@ -42,11 +42,11 @@ class RestaurantForm(Form):
         'address', validators=[DataRequired()]
     )
     lat = DecimalField(
-        'lat', validators=[DataRequired(), NumberRange(min=-90, max=90)],
+        'lat', validators=[DataRequired(), NumberRange(min=40.499080, max=40.913124)],
         places=6
     )
     lng = DecimalField(
-        'lng', validators=[DataRequired(), NumberRange(min=-180, max=180)],
+        'lng', validators=[DataRequired(), NumberRange(min=-73.703058, max=-74.253449)],
         places=6
     )
     cuisine = SelectField(

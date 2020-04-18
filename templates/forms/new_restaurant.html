@@ -35,10 +35,13 @@
         {{ form.address(class_ = 'form-control', autofocus = true) }}
       </div>
       <div class="form-group">
+        <span>The approximate latitude and longitude values for New York City are:</span><br>
+        <span>min lat = 40.499080, max lat = 40.913124</span><br>
+        <span>min lng = -73.703058, max lng = -74.253449</span><br>
         <label for="lat">Latitude</label>
-        {{ form.lat(class_ = 'form-control', placeholder='±00.000000', autofocus = true) }}
+        {{ form.lat(class_ = 'form-control', placeholder='00.000000', autofocus = true) }}
         <label for="lng">Longitude</label>
-        {{ form.lng(class_ = 'form-control', placeholder='±000.000000', autofocus = true) }}
+        {{ form.lng(class_ = 'form-control', placeholder='-00.000000', autofocus = true) }}
       </div>
       <div class="form-group">
         <label for="cuisine">Cuisine</label>
