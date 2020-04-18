@@ -211,6 +211,18 @@ def create_app(test_config = None):
             flash('Sorry. Your review was NOT successfully saved!')
         return redirect('/restaurants/'+str(id)+'/reviews')
 
+    '''
+    GET /new_restaurants
+        Renders the template associated with the new_restaurant form.
+    '''
+    @app.route('/new_restaurants', methods=['GET'])
+    @requires_auth
+    def create_restaurant_form():
+        form = RestaurantForm()
+        return render_template('forms/new_restaurant.html',
+                                 userinfo=session['profile'],
+                                 form=form)
+
     return app
 
 app = create_app()

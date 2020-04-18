@@ -1,0 +1,96 @@
+{% extends 'layouts/main.html' %}
+{% block title %}New Restaurant{% endblock %}
+{% block description %}
+  <meta name="description" content="Post a new restaurant located at one of New York's boroughs.">
+{% endblock %}
+{% block links %}{% endblock %}
+{% block breadcrumb %}
+  <div aria-label="Breadcrumb">
+    <ol id="breadcrumb">
+      <li><a href="/restaurants">Home</a></li>
+      <li aria-current="page">Post a Restaurant</li>
+    </ol>
+  </div>
+{% endblock %}
+{% block content %}
+  <div class="form-wrapper">
+    <form method="post" class="form">
+      <h3 class="form-heading">Post a Restaurant</h3>
+      <div class="form-group">
+        <label for="name">Name</label>
+        {{ form.name(class_ = 'form-control', autofocus = true) }}
+        <label for="borough">Borough</label>
+        {{ form.borough(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="photograph">Photograph</label>
+        {{ form.photograph(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="img_description">Image Description</label>
+        {{ form.img_description(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        {{ form.address(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="lat">Latitude</label>
+        {{ form.lat(class_ = 'form-control', placeholder='±00.000000', autofocus = true) }}
+        <label for="lng">Longitude</label>
+        {{ form.lng(class_ = 'form-control', placeholder='±000.000000', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <label for="cuisine">Cuisine</label>
+        {{ form.cuisine(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+        <span>Opening Hours</span>
+        <table>
+          <tr>
+            <th>Day</th>
+            <th>Open</th>
+            <th>Close</th>
+          </tr>
+          <tr>
+            <td>Monday:</td>
+            <td>{{ form.mon_st(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.mon_cl(class_ = 'form-control', autofocus = true) }}</td>
+          </tr>
+          <tr>
+            <td>Tuesday:</td>
+            <td>{{ form.tue_st(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.tue_cl(class_ = 'form-control', autofocus = true) }}</td>
+          </tr>
+          <tr>
+            <td>Wednesday:</td>
+            <td>{{ form.wed_st(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.wed_cl(class_ = 'form-control', autofocus = true) }}</td>
+          </tr>
+          <tr>
+            <td>Thursday:</td>
+            <td>{{ form.thu_st(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.thu_cl(class_ = 'form-control', autofocus = true) }}</td>
+          </tr>
+          <tr>
+            <td>Friday:</td>
+            <td>{{ form.fri_st(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.fri_cl(class_ = 'form-control', autofocus = true) }}</td>
+          </tr>
+          <tr>
+            <td>Saturday:</td>
+            <td>{{ form.sat_st(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.sat_cl(class_ = 'form-control', autofocus = true) }}</td>
+          </tr>
+          <tr>
+            <td>Sunday:</td>
+            <td>{{ form.sun_st(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.sun_cl(class_ = 'form-control', autofocus = true) }}</td>
+          </tr>
+        </table>
+      </div>
+      <input type="submit" value="Post" class="submit-btn">
+    </form>
+  </div>
+{% endblock %}
+{% block scripts %}{% endblock %}
