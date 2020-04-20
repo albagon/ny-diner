@@ -12,7 +12,7 @@ from six.moves.urllib.parse import urlencode
 from datetime import datetime
 import sys
 
-from models import db, setup_db, Restaurant, Review
+from models import db, setup_db, db_drop_and_create_all, Restaurant, Review
 from data import populate_db
 from forms import *
 
@@ -31,6 +31,7 @@ def create_app(test_config = None):
     setup_db(app)
     # Allow CORS for all domains on all routes
     CORS(app)
+    db_drop_and_create_all()
 
     '''
     Auth0 settings
@@ -48,6 +49,11 @@ def create_app(test_config = None):
             'scope': 'openid profile email',
         },
     )
+
+    '''
+    INSERT records into db
+    '''
+    populate_db()
 
     '''
     Auth0 routes
@@ -100,12 +106,7 @@ def create_app(test_config = None):
         return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
     '''
-    INSERT records so we can test our methods and db
-    '''
-    populate_db()
-
-    '''
-    ENDPOINTS
+    ENDPOINTS for Restaurants and Reviews
     '''
 
     '''

@@ -18,10 +18,11 @@ def setup_db(app, database_path = database_path):
     db.app = app
     db.init_app(app)
 
-    '''
-    Drop the database tables and start fresh
-    Initialize a clean database
-    '''
+'''
+Drop the database tables and start fresh
+Initialize a clean database
+'''
+def db_drop_and_create_all():
     db.drop_all()
     db.create_all()
 
