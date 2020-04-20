@@ -1,10 +1,11 @@
+from flask import abort
 from datetime import datetime
-from flask_wtf import Form
+from flask_wtf import Form, FlaskForm
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField, TextAreaField, DecimalField
 from wtforms.validators import DataRequired, AnyOf, URL, NumberRange
 from enums import Borough, Cuisine, Hour
 
-class ReviewForm(Form):
+class ReviewForm(FlaskForm):
     restaurant_id = StringField(
         'restaurant_id', validators=[DataRequired()]
     )
@@ -24,7 +25,7 @@ class ReviewForm(Form):
         'comments', validators=[DataRequired()]
     )
 
-class RestaurantForm(Form):
+class RestaurantForm(FlaskForm):
     name = StringField(
         'name', validators=[DataRequired()]
     )
@@ -46,66 +47,109 @@ class RestaurantForm(Form):
         places=6
     )
     lng = DecimalField(
-        'lng', validators=[DataRequired(), NumberRange(min=-73.703058, max=-74.253449)],
+        'lng', validators=[DataRequired(), NumberRange(min=-74.253449, max=-73.703058)],
         places=6
     )
     cuisine = SelectField(
         'cuisine', validators=[DataRequired()],
         choices=Cuisine.getCuisines()
     )
-    mon_st = SelectField(
-        'mon_st', validators=[DataRequired()],
+    opening_0 = SelectField(
+        'opening_0', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    mon_cl = SelectField(
-        'mon_cl', validators=[DataRequired()],
+    closing_0 = SelectField(
+        'closing_0', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    tue_st = SelectField(
-        'tue_st', validators=[DataRequired()],
+    opening_1 = SelectField(
+        'opening_1', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    tue_cl = SelectField(
-        'tue_cl', validators=[DataRequired()],
+    closing_1 = SelectField(
+        'closing_1', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    wed_st = SelectField(
-        'wed_st', validators=[DataRequired()],
+    opening_2 = SelectField(
+        'opening_2', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    wed_cl = SelectField(
-        'wed_cl', validators=[DataRequired()],
+    closing_2 = SelectField(
+        'closing_2', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    thu_st = SelectField(
-        'thu_st', validators=[DataRequired()],
+    opening_3 = SelectField(
+        'opening_3', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    thu_cl = SelectField(
-        'thu_cl', validators=[DataRequired()],
+    closing_3 = SelectField(
+        'closing_3', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    fri_st = SelectField(
-        'fri_st', validators=[DataRequired()],
+    opening_4 = SelectField(
+        'opening_4', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    fri_cl = SelectField(
-        'fri_cl', validators=[DataRequired()],
+    closing_4 = SelectField(
+        'closing_4', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    sat_st = SelectField(
-        'sat_st', validators=[DataRequired()],
+    opening_5 = SelectField(
+        'opening_5', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    sat_cl = SelectField(
-        'sat_cl', validators=[DataRequired()],
+    closing_5 = SelectField(
+        'closing_5', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    sun_st = SelectField(
-        'sun_st', validators=[DataRequired()],
+    opening_6 = SelectField(
+        'opening_6', validators=[DataRequired()],
         choices=Hour.getHours()
     )
-    sun_cl = SelectField(
-        'sun_cl', validators=[DataRequired()],
+    closing_6 = SelectField(
+        'closing_6', validators=[DataRequired()],
         choices=Hour.getHours()
     )
+
+'''
+Input: An opening time and a closing time. It checks that the opening time is earlier
+that the closing time and returns a string with both values. If the opening time is
+not earlier than closing time, it returns an error string.
+It is also possible to receive "Closed" as an opening or closing time.
+In this case the function returns "Closed".
+'''
+def create_hours(opening, closing):
+    if ((opening == "Closed") | (closing == "Closed")):
+        return "Closed"
+    else:
+        opening_time = int(opening)
+        closing_time = int(closing)
+        if (opening_time < closing_time):
+            return opening + " - " + closing + " hrs"
+        else:
+            return "error"
+
+'''
+Input: A Restaurant Form.
+Returns: A success equal to True and a dictionary with the operating hours of a Restaurant.
+If the hours are not valid, then it returns a success equal to False.
+'''
+def format_operating_hours(form):
+    week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    week_hours = {}
+    day_hours = ""
+    form_dic = form.__dict__
+    error = False
+    for i, value in enumerate(week):
+        day_hours = create_hours(form["opening_" + str(i)].data, form["closing_" + str(i)].data)
+        if day_hours == "error":
+            error = True
+            break
+        else:
+            week_hours[value] = day_hours
+    if error:
+        operating_hours = {"success" : False, "week_hours": None}
+    else:
+        operating_hours = {"success" : True, "week_hours": week_hours}
+
+    return operating_hours

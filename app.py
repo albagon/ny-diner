@@ -180,7 +180,7 @@ def create_app(test_config = None):
 
     '''
     POST /restaurants/<id>/reviews
-        Renders the template associated with the new_review form.
+        Post a new review in db.
     '''
     @app.route('/restaurants/<int:id>/reviews', methods=['POST'])
     @requires_auth
@@ -208,7 +208,7 @@ def create_app(test_config = None):
             # on successful db insert, flash success
             flash('Thank you ' + body['name'] + ' for your review.')
         else:
-            flash('Sorry. Your review was NOT successfully saved!')
+            flash('An error occurred. Review could not be listed.')
         return redirect('/restaurants/'+str(id)+'/reviews')
 
     '''
@@ -222,6 +222,52 @@ def create_app(test_config = None):
         return render_template('forms/new_restaurant.html',
                                  userinfo=session['profile'],
                                  form=form)
+
+    '''
+    POST /new_restaurants
+        Post a new restaurant in db.
+    '''
+    @app.route('/new_restaurants', methods=['POST'])
+    @requires_auth
+    def create_restaurant_submission():
+        error = False
+        try:
+            form = RestaurantForm(request.form)
+            if form.validate_on_submit():
+                op_hours = format_operating_hours(form)
+                if op_hours['success']:
+                    restaurant = Restaurant(
+                        name = form.name.data,
+                        borough = form.borough.data,
+                        photograph = form.photograph.data,
+                        img_description = form.img_description.data,
+                        address = form.address.data,
+                        latlng = [float(form.lat.data), float(form.lng.data)],
+                        cuisine = form.cuisine.data,
+                        operating_hours = op_hours['week_hours']
+                        )
+                    restaurant.insert()
+                else:
+                    error = True
+                    message = 'An error occurred. Wrong formating of operating hours.'
+            else:
+                error = True
+                message = 'The form contains invalid data.'
+        except:
+            error = True
+            message = 'The restaurant could not be listed.'
+            db.session.rollback()
+            print(sys.exc_info())
+        finally:
+            db.session.close()
+        if not error:
+            flash('Your form is valid and ' + form.name.data + ' was inserted.')
+            return redirect('/new_restaurants')
+        else:
+            flash('An error occurred. ' + message)
+            return render_template('forms/new_restaurant.html',
+                                     userinfo=session['profile'],
+                                     form=form)
 
     return app
 

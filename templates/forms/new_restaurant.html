@@ -15,24 +15,40 @@
 {% block content %}
   <div class="form-wrapper">
     <form method="post" class="form">
-      <h3 class="form-heading">Post a Restaurant</h3>
+      {{ form.csrf_token }}
+      <h3 class="form-heading">Post new Restaurant</h3>
       <div class="form-group">
         <label for="name">Name</label>
         {{ form.name(class_ = 'form-control', autofocus = true) }}
+        {% if form.name.errors %}
+          <ul class="errors">{% for error in form.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
         <label for="borough">Borough</label>
         {{ form.borough(class_ = 'form-control', autofocus = true) }}
+        {% if form.borough.errors %}
+          <ul class="errors">{% for error in form.borough.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
       </div>
       <div class="form-group">
-        <label for="photograph">Photograph URL</label>
-        {{ form.photograph(class_ = 'form-control', placeholder='http://...', autofocus = true) }}
+        <label for="photograph">Photograph Link</label>
+        {{ form.photograph(class_ = 'form-control', placeholder='http://', autofocus = true) }}
+        {% if form.photograph.errors %}
+          <ul class="errors">{% for error in form.photograph.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
       </div>
       <div class="form-group">
         <label for="img_description">Image Description</label>
         {{ form.img_description(class_ = 'form-control', autofocus = true) }}
+        {% if form.img_description.errors %}
+          <ul class="errors">{% for error in form.img_description.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
       </div>
       <div class="form-group">
         <label for="address">Address</label>
         {{ form.address(class_ = 'form-control', autofocus = true) }}
+        {% if form.address.errors %}
+          <ul class="errors">{% for error in form.address.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
       </div>
       <div class="form-group">
         <span>The approximate latitude and longitude values for New York City are:</span><br>
@@ -40,15 +56,24 @@
         <span>min lng = -73.703058, max lng = -74.253449</span><br>
         <label for="lat">Latitude</label>
         {{ form.lat(class_ = 'form-control', placeholder='00.000000', autofocus = true) }}
+        {% if form.lat.errors %}
+          <ul class="errors">{% for error in form.lat.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
         <label for="lng">Longitude</label>
         {{ form.lng(class_ = 'form-control', placeholder='-00.000000', autofocus = true) }}
+        {% if form.lng.errors %}
+          <ul class="errors">{% for error in form.lng.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
       </div>
       <div class="form-group">
         <label for="cuisine">Cuisine</label>
         {{ form.cuisine(class_ = 'form-control', autofocus = true) }}
+        {% if form.cuisine.errors %}
+          <ul class="errors">{% for error in form.cuisine.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+        {% endif %}
       </div>
       <div class="form-group">
-        <span>Opening Hours</span>
+        <span>Operating Hours</span>
         <table>
           <tr>
             <th>Day</th>
@@ -57,38 +82,38 @@
           </tr>
           <tr>
             <td>Monday:</td>
-            <td>{{ form.mon_st(class_ = 'form-control', autofocus = true) }}</td>
-            <td>{{ form.mon_cl(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.opening_0(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.closing_0(class_ = 'form-control', autofocus = true) }}</td>
           </tr>
           <tr>
             <td>Tuesday:</td>
-            <td>{{ form.tue_st(class_ = 'form-control', autofocus = true) }}</td>
-            <td>{{ form.tue_cl(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.opening_1(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.closing_1(class_ = 'form-control', autofocus = true) }}</td>
           </tr>
           <tr>
             <td>Wednesday:</td>
-            <td>{{ form.wed_st(class_ = 'form-control', autofocus = true) }}</td>
-            <td>{{ form.wed_cl(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.opening_2(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.closing_2(class_ = 'form-control', autofocus = true) }}</td>
           </tr>
           <tr>
             <td>Thursday:</td>
-            <td>{{ form.thu_st(class_ = 'form-control', autofocus = true) }}</td>
-            <td>{{ form.thu_cl(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.opening_3(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.closing_3(class_ = 'form-control', autofocus = true) }}</td>
           </tr>
           <tr>
             <td>Friday:</td>
-            <td>{{ form.fri_st(class_ = 'form-control', autofocus = true) }}</td>
-            <td>{{ form.fri_cl(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.opening_4(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.closing_4(class_ = 'form-control', autofocus = true) }}</td>
           </tr>
           <tr>
             <td>Saturday:</td>
-            <td>{{ form.sat_st(class_ = 'form-control', autofocus = true) }}</td>
-            <td>{{ form.sat_cl(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.opening_5(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.closing_5(class_ = 'form-control', autofocus = true) }}</td>
           </tr>
           <tr>
             <td>Sunday:</td>
-            <td>{{ form.sun_st(class_ = 'form-control', autofocus = true) }}</td>
-            <td>{{ form.sun_cl(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.opening_6(class_ = 'form-control', autofocus = true) }}</td>
+            <td>{{ form.closing_6(class_ = 'form-control', autofocus = true) }}</td>
           </tr>
         </table>
       </div>
