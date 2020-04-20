@@ -206,9 +206,9 @@ def create_app(test_config = None):
             db.session.close()
         if not error:
             # on successful db insert, flash success
-            flash('Thank you ' + body['name'] + ' for your review.')
+            flash('Thank you ' + body['name'] + ' for your review.', 'success')
         else:
-            flash('An error occurred. Review could not be listed.')
+            flash('An error occurred. Review could not be listed.', 'error')
         return redirect('/restaurants/'+str(id)+'/reviews')
 
     '''
@@ -249,7 +249,7 @@ def create_app(test_config = None):
                     restaurant.insert()
                 else:
                     error = True
-                    message = 'An error occurred. Wrong formating of operating hours.'
+                    message = 'Wrong formating of operating hours.'
             else:
                 error = True
                 message = 'The form contains invalid data.'
@@ -261,10 +261,10 @@ def create_app(test_config = None):
         finally:
             db.session.close()
         if not error:
-            flash('Your form is valid and ' + form.name.data + ' was inserted.')
+            flash(form.name.data + ' was successfully listed.', 'success')
             return redirect('/new_restaurants')
         else:
-            flash('An error occurred. ' + message)
+            flash('An error occurred. ' + message, 'error')
             return render_template('forms/new_restaurant.html',
                                      userinfo=session['profile'],
                                      form=form)

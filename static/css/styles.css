@@ -429,6 +429,28 @@ header {
   padding-left: 10px;
 }
 
+/* ====================== Flashing alerts ====================== */
+.alert {
+  padding: 12px;
+  border-radius: 3px;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.alert-error {
+  border-color: #8b000063;
+  background-color: #ff000082;
+  color: #fdfdfd;
+}
+
+.alert-success {
+  border-color: #0064004f;
+  background-color: #0080008c;
+  color: #fdfdfd;
+}
+
 /* This media query makes the map taller in tablets */
 @media screen and (min-width: 32em) {
   .title a {
