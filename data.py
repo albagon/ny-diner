@@ -11,13 +11,13 @@ def populate_db():
         latlng = [40.713829, -73.989667],
         cuisine = "Chinese",
         operating_hours = {
-          "Monday": "5:30 pm - 11:00 pm",
-          "Tuesday": "5:30 pm - 12:00 am",
-          "Wednesday": "5:30 pm - 12:00 am",
-          "Thursday": "5:30 pm - 12:00 am",
-          "Friday": "5:30 pm - 12:00 am",
-          "Saturday": "12:00 pm - 4:00 pm",
-          "Sunday": "12:00 pm - 4:00 pm"
+          "Monday": "17 - 23 hrs",
+          "Tuesday": "17 - 23 hrs",
+          "Wednesday": "17 - 23 hrs",
+          "Thursday": "17 - 23 hrs",
+          "Friday": "17 - 23 hrs",
+          "Saturday": "12 - 16 hrs",
+          "Sunday": "12 - 16 hrs"
         })
     one.insert()
 
@@ -54,13 +54,13 @@ def populate_db():
         latlng = [40.683555, -73.966393],
         cuisine = "Italian",
         operating_hours = {
-          "Monday": "5:30 pm - 11:00 pm",
-          "Tuesday": "5:30 pm - 11:00 pm",
-          "Wednesday": "5:30 pm - 11:00 pm",
-          "Thursday": "5:30 pm - 11:00 pm",
-          "Friday": "5:30 pm - 11:00 pm",
-          "Saturday": "5:00 pm - 11:30 pm",
-          "Sunday": "12:00 pm - 3:00 pm"
+          "Monday": "17 - 23 hrs",
+          "Tuesday": "17 - 23 hrs",
+          "Wednesday": "17 - 23 hrs",
+          "Thursday": "17 - 23 hrs",
+          "Friday": "17 - 23 hrs",
+          "Saturday": "17 - 23 hrs",
+          "Sunday": "12 - 15 hrs"
         })
     two.insert()
 
@@ -97,13 +97,13 @@ def populate_db():
         latlng = [40.747143, -73.985414],
         cuisine = "Korean",
         operating_hours = {
-          "Monday": "11:30 am - 2:00 am",
-          "Tuesday": "11:30 am - 2:00 am",
-          "Wednesday": "11:30 am - 2:00 am",
-          "Thursday": "11:30 am - 2:00 am",
-          "Friday": "11:30 am - 6:00 am",
-          "Saturday": "11:30 am - 6:00 am",
-          "Sunday": "11:30 am - 2:00 am"
+          "Monday": "11 - 23 hrs",
+          "Tuesday": "11 - 23 hrs",
+          "Wednesday": "11 - 23 hrs",
+          "Thursday": "11 - 23 hrs",
+          "Friday": "11 - 23 hrs",
+          "Saturday": "11 - 23 hrs",
+          "Sunday": "11 - 23 hrs"
         })
     three.insert()
 
@@ -140,13 +140,13 @@ def populate_db():
         latlng = [40.722216, -73.987501],
         cuisine = "American",
         operating_hours = {
-          "Monday": "8:00 am - 10:30 pm",
-          "Tuesday": "8:00 am - 10:30 pm",
-          "Wednesday": "8:00 am - 10:30 pm",
-          "Thursday": "8:00 am - 2:30 am",
-          "Friday": "8:00 am - Sat",
-          "Saturday": "Open 24 hours",
-          "Sunday": "Sat - 10:30 pm"
+          "Monday": "08 - 22 hrs",
+          "Tuesday": "08 - 22 hrs",
+          "Wednesday": "08 - 22 hrs",
+          "Thursday": "08 - 23 hrs",
+          "Friday": "08 - 23 hrs",
+          "Saturday": "08 - 22 hrs",
+          "Sunday": "08 - 22 hrs"
         })
     four.insert()
 
@@ -159,13 +159,13 @@ def populate_db():
         latlng = [40.705089, -73.933585],
         cuisine = "Italian",
         operating_hours = {
-          "Monday": "11:00 am - 12:00 am",
-          "Tuesday": "11:00 am - 12:00 am",
-          "Wednesday": "11:00 am - 12:00 am",
-          "Thursday": "11:00 am - 12:00 am",
-          "Friday": "11:00 am - 12:00 am",
-          "Saturday": "10:00 am - 12:00 am",
-          "Sunday": "10:00 am - 12:00 am"
+          "Monday": "11 - 23 hrs",
+          "Tuesday": "11 - 23 hrs",
+          "Wednesday": "11 - 23 hrs",
+          "Thursday": "11 - 23 hrs",
+          "Friday": "11 - 23 hrs",
+          "Saturday": "10 - 23 hrs",
+          "Sunday": "10 - 23 hrs"
         })
     five.insert()
 
@@ -194,13 +194,13 @@ def populate_db():
         latlng = [40.743394, -73.954235],
         cuisine = "Mexican",
         operating_hours = {
-          "Monday": "5:00 pm - 12:00 am",
-          "Tuesday": "5:00 pm - 12:00 am",
-          "Wednesday": "5:00 pm - 12:00 am",
-          "Thursday": "5:00 pm - 12:00 am",
-          "Friday": "5:00 pm - 12:00 am",
-          "Saturday": "11:00 am - 12:00 am",
-          "Sunday": "11:00 am - 12:00 am"
+          "Monday": "17 - 23 hrs",
+          "Tuesday": "17 - 23 hrs",
+          "Wednesday": "17 - 23 hrs",
+          "Thursday": "17 - 23 hrs",
+          "Friday": "17 - 23 hrs",
+          "Saturday": "11 - 23 hrs",
+          "Sunday": "11 - 23 hrs"
         })
     six.insert()
 
