@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import json
 
+from forms import *
+
 database_path = os.environ['DATABASE_URL']
 
 db = SQLAlchemy()
@@ -87,6 +89,31 @@ class Restaurant(db.Model):
             'cuisine': self.cuisine,
             'operating_hours': self.operating_hours
         }
+
+    '''
+    to_form()
+        Returns a RestaurantForm filled with the Restaurant's data.
+    '''
+    def to_form(self):
+        form = RestaurantForm()
+        form.name.data = self.name
+        form.borough.data = self.borough
+        form.photograph.data = self.photograph
+        form.img_description.data = self.img_description
+        form.address.data = self.address
+        form.lat.data = self.latlng[0]
+        form.lng.data = self.latlng[1]
+        form.cuisine.data = self.cuisine
+        i = 0
+        for day, hours in self.operating_hours.items():
+            if hours == 'Closed':
+                form["opening_" + str(i)].data = 'Closed'
+                form["closing_" + str(i)].data = 'Closed'
+            else:
+                form["opening_" + str(i)].data = hours[0:2]
+                form["closing_" + str(i)].data = hours[5:7]
+            i = i + 1
+        return form
 
     '''
     insert()

@@ -161,7 +161,8 @@ def create_app(test_config = None):
                                    success=True,
                                    userinfo=session['profile'],
                                    restaurant=restaurant.long(),
-                                   reviews=reviews_format)
+                                   reviews=reviews_format,
+                                   form=restaurant.to_form())
 
     '''
     GET /restaurants/<id>/reviews
