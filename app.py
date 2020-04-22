@@ -165,10 +165,10 @@ def create_app(test_config = None):
                                    form=restaurant.to_form())
 
     '''
-    GET /restaurants/<id>/reviews
+    GET /restaurants/<id>/new_reviews
         Renders the template associated with the new_review form.
     '''
-    @app.route('/restaurants/<int:id>/reviews', methods=['GET'])
+    @app.route('/restaurants/<int:id>/new_reviews', methods=['GET'])
     @requires_auth
     def create_review_form(id):
         restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
@@ -181,10 +181,10 @@ def create_app(test_config = None):
                                  form=form)
 
     '''
-    POST /restaurants/<id>/reviews
+    POST /restaurants/<id>/new_reviews
         Post a new review in db.
     '''
-    @app.route('/restaurants/<int:id>/reviews', methods=['POST'])
+    @app.route('/restaurants/<int:id>/new_reviews', methods=['POST'])
     @requires_auth
     def create_review_submission(id):
         error = False
@@ -211,7 +211,7 @@ def create_app(test_config = None):
             flash('Thank you ' + body['name'] + ' for your review.', 'success')
         else:
             flash('An error occurred. Review could not be listed.', 'error')
-        return redirect('/restaurants/'+str(id)+'/reviews')
+        return redirect('/restaurants/'+str(id)+'/new_reviews')
 
     '''
     GET /new_restaurants
