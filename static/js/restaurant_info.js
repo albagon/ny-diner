@@ -33,7 +33,8 @@ window.addEventListener("load", function () {
 
     // Define what happens on successful data submission
     XHR.addEventListener("load", function(event) {
-      alert(event.target.responseText);
+      //alert(event.target.responseText);
+      window.location.href = "/restaurants/" + restaurant.id.toString();
     } );
 
     // Define what happens in case of error
@@ -132,7 +133,7 @@ var modal = document.getElementById("myModal");
 var btn = document.getElementById("myBtn");
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementById("closeModal");
 
 // When the user clicks on the button, open the modal
 btn.onclick = function() {

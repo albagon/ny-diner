@@ -271,6 +271,62 @@ def create_app(test_config = None):
                                      userinfo=session['profile'],
                                      form=form)
 
+    '''
+    PATCH /restaurants/<id>
+        Where <id> is the existing model id.
+        It should respond with a 404 error if <id> is not found.
+        It should update the corresponding row for <id>
+        It should require the 'patch:restaurants' permission.
+        It should contain the restaurant.long() data representation.
+    '''
+    @app.route('/restaurants/<int:id>', methods=['PATCH'])
+    @requires_auth
+    def update_restaurant(id):
+        error = False
+        try:
+            form = RestaurantForm(request.form)
+            restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
+            if restaurant == None:
+                abort(404)
+            elif form.validate_on_submit():
+                op_hours = format_operating_hours(form)
+                if op_hours['success']:
+                    restaurant.name = form.name.data,
+                    restaurant.borough = form.borough.data,
+                    restaurant.photograph = form.photograph.data,
+                    restaurant.img_description = form.img_description.data,
+                    restaurant.address = form.address.data,
+                    restaurant.latlng[0] = float(form.lat.data),
+                    restaurant.latlng[1] = float(form.lng.data),
+                    restaurant.cuisine = form.cuisine.data,
+                    restaurant.operating_hours = op_hours['week_hours']
+                    restaurant.update()
+                else:
+                    error = True
+                    message = 'Wrong formating of operating hours.'
+            else:
+                error = True
+                message = 'The form contains invalid data.'
+        except HTTPException:
+            error = True
+            message = 'The restaurant could not be updated.'
+            db.session.rollback()
+            print(sys.exc_info())
+        if not error:
+            flash(form.name.data + ' was successfully updated.', 'success')
+            return jsonify({
+                        "success": True,
+                        "restaurant": restaurant.long()
+                    })
+        else:
+            flash('An error occurred. ' + message, 'error')
+            if form.errors:
+                for field, f_errors in form.errors.items():
+                    if f_errors:
+                        for error in f_errors:
+                            flash(field + ': ' + error, 'error')
+            abort(404)
+
     return app
 
 app = create_app()

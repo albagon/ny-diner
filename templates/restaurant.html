@@ -49,6 +49,16 @@
     <!-- End map -->
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
+      {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{category}}">
+              <a class="close" data-dismiss="alert">&times;</a>
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
       <h2 id="restaurant-name">{{restaurant.name}}</h2>
       <img id="restaurant-img" class="restaurant-img" src="{{restaurant.photograph}}" alt="Image of {{restaurant.name}} Restaurant">
       <p id="restaurant-cuisine">{{restaurant.cuisine}}</p>
@@ -62,14 +72,14 @@
         {% endfor %}
       </table>
       <!-- Trigger/Open The Modal -->
-      <button id="myBtn">Edit - Open Modal</button>
+      <button id="myBtn" class="link-btn">Edit Restaurant</button>
 
       <!-- The Modal -->
       <div id="myModal" class="modal">
 
         <!-- Modal content -->
         <div class="modal-content">
-          <span class="close">&times;</span>
+          <span id="closeModal" class="close">&times;</span>
           <div class="form-wrapper">
             <form id="editForm" class="form">
               {{ form.csrf_token }}
