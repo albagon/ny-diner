@@ -30,11 +30,11 @@ def db_drop_and_create_all():
 
 
 '''
-Restaurants
+restaurants
     This table holds the information of all participating restaurants.
 '''
 class Restaurant(db.Model):
-    __tablename__ = 'Restaurants'
+    __tablename__ = 'restaurants'
 
     id = Column(Integer, primary_key = True)
     name = Column(String, nullable = False, unique = True)
@@ -168,14 +168,14 @@ class Restaurant(db.Model):
         db.session.commit()
 
 '''
-Reviews
+reviews
     This table holds the information of all the reviews made to all restaurants.
 '''
 class Review(db.Model):
-    __tablename__ = 'Reviews'
+    __tablename__ = 'reviews'
 
     id = Column(Integer, primary_key = True)
-    restaurant_id = Column(Integer, db.ForeignKey('Restaurants.id'), nullable = False)
+    restaurant_id = Column(Integer, db.ForeignKey('restaurants.id'), nullable = False)
     name = Column(String, nullable = False)
     date = Column(DateTime, nullable = False, default = datetime.today())
     rating = Column(Integer, nullable = False)
