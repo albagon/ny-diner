@@ -8,16 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+  <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
   <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 
 <body>
   <div class="login-wrapper">
     <div class="login-prompt">
-        <img src="https://i.cloudup.com/StzWWrY34s.png" />
+        <img src="{{ url_for('static', filename='img/icon-192x192.png') }}" />
         <h3>New York Diner</h3>
-        <p>Please login to access the catalogue.</p>
-        <a href="/login">Log In</a>
+        <p>Please <a href="/login">log in</a> to access the catalogue.</p>
     </div>
   </div>
 </body>
