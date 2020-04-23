@@ -46,7 +46,7 @@
       {% endfor %}
     </table>
     <!-- Trigger/Open The Modal -->
-    <button id="myBtn" class="link-btn">Edit Restaurant</button>
+    <button id="myBtn" class="btn">Edit Restaurant</button>
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
@@ -169,7 +169,7 @@
   <section id="reviews-container">
     <div class="reviews-heading">
       <h2>Reviews</h2>
-      <span><a href="{{ url_for('create_review_form', id=restaurant.id) }}" class="link-btn">Write a review</a></span>
+      <span><a href="{{ url_for('create_review_form', id=restaurant.id) }}" class="btn">Write a review</a></span>
     </div>
     <ul id="reviews-list">
       {% if reviews is false %}

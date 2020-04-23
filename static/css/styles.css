@@ -250,6 +250,15 @@ header {
 }
 
 /* ====================== Restaurant Details ====================== */
+.inside {
+  display: flex;
+	flex-wrap: wrap;
+	background-color: #fdfdfd;
+	margin: 0;
+	position:relative;
+  width: 100%;
+}
+
 .inside header {
   position: fixed;
   top: 0;
@@ -343,15 +352,16 @@ header {
   right: 0;
 }
 
-.link-btn {
+.btn {
   color: black;
   padding: 10px 12px;
   background-color: white;
   border: 1px solid #dadce0;
   border-radius: 36px;
+  font: 16px/1.5 Arial, Helvetica, sans-serif;
 }
 
-.link-btn:hover {
+.btn:hover {
   color: black;
   background-color: #d9d9d954;
 }
@@ -469,10 +479,10 @@ header {
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 40% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 80%;
 }
 
 /* The Close Button */
@@ -540,4 +550,8 @@ header {
 	#footer {
 	  padding: 25px;
 	}
+
+  .modal-content {
+    margin: 15% auto;
+  }
 }
