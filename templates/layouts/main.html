@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>{% block title %}{% endblock %} - New York Diner</title>
+  <title>{% block title %}{% endblock %}</title>
   {% block description %}{% endblock %}
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
@@ -12,6 +12,7 @@
 </head>
 
 <body>
+  {% block div_inside1 %}{% endblock %}
   <header>
     <nav>
       <div class="new-nav">
@@ -50,6 +51,7 @@
   </footer>
 
   {% block scripts %}{% endblock %}
+  {% block div_inside2 %}{% endblock %}
 </body>
 
 </html>
