@@ -461,8 +461,8 @@ header {
   color: #fdfdfd;
 }
 
-/* The modal */
-/* The Modal (background) */
+/* =========================== Modal =========================== */
+/* The Modal background */
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -498,6 +498,27 @@ header {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+/* =========================== Forms =========================== */
+.form-wrapper{
+  padding: 0 10%;
+}
+
+.form {
+
+}
+
+.form-heading {
+
+}
+
+.form-group {
+
+}
+
+.errors {
+
 }
 
 /* This media query makes the map taller in tablets */
