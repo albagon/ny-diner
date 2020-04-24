@@ -32,7 +32,7 @@
       <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="cuisines select">
         <option value="all">All Cuisines</option>
       </select>
-      <span><a href="{{ url_for('create_restaurant_form') }}" class="btn">Post a Restaurant</a></span>
+      <a href="{{ url_for('create_restaurant_form') }}" class="btn">Post a Restaurant</a>
     </div>
     <ul id="restaurants-list"></ul>
   </section>

@@ -193,6 +193,11 @@ header {
   width: 200px;
 }
 
+.filter-options a {
+  display: inline-block;
+  margin-left: 10px;
+}
+
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
   display: flex;
