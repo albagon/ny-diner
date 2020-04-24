@@ -5,7 +5,7 @@ def populate_db():
     one = Restaurant(
         name = "Mission Chinese Food",
         borough = "Manhattan",
-        photograph = "/static/img/1.jpg",
+        photograph = "https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668",
         img_description = "An inside view of a busy restaurant with all tables ocupied by people enjoying their meal",
         address = "171 E Broadway, New York, NY 10002",
         latlng = [40.713829, -73.989667],
@@ -48,7 +48,7 @@ def populate_db():
     two = Restaurant(
         name = "Emily",
         borough = "Brooklyn",
-        photograph = "/static/img/2.jpg",
+        photograph = "https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668",
         img_description = "A traditional margherita pizza",
         address = "919 Fulton St, Brooklyn, NY 11238",
         latlng = [40.683555, -73.966393],
@@ -91,7 +91,7 @@ def populate_db():
     three = Restaurant(
         name = "Kang Ho Dong Baekjeong",
         borough = "Manhattan",
-        photograph = "/static/img/3.jpg",
+        photograph = "https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668",
         img_description = "An inside view of an empty restaurant. There is a steam pot in the middle of each table",
         address = "1 E 32nd St, New York, NY 10016",
         latlng = [40.747143, -73.985414],
@@ -134,7 +134,7 @@ def populate_db():
     four = Restaurant(
         name = "Katz's Delicatessen",
         borough = "Manhattan",
-        photograph = "/static/img/4.jpg",
+        photograph = "https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668",
         img_description = "A night scene of people walking around the corner of a busy restaurant",
         address = "205 E Houston St, New York, NY 10002",
         latlng = [40.722216, -73.987501],
@@ -153,7 +153,7 @@ def populate_db():
     five = Restaurant(
         name = "Roberta's Pizza",
         borough = "Brooklyn",
-        photograph = "/static/img/5.jpg",
+        photograph = "https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668",
         img_description = "An inside view of a relax and busy restaurant with a kitchen bar at the back",
         address = "261 Moore St, Brooklyn, NY 11206",
         latlng = [40.705089, -73.933585],
@@ -188,7 +188,7 @@ def populate_db():
     six = Restaurant(
         name = "Casa Enrique",
         borough = "Queens",
-        photograph = "/static/img/10.jpg",
+        photograph = "https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668",
         img_description = "An inside view of an empty restaurant with a big bar and stools",
         address = "5-48 49th Ave, Queens, NY 11101",
         latlng = [40.743394, -73.954235],
