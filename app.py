@@ -188,7 +188,7 @@ def create_review_submission(id):
         review = Review(
             restaurant_id = id,
             name = form['name'],
-            date = form['date'],
+            date = datetime.now(),
             rating = form['rating'],
             comments = form['comments']
         )
