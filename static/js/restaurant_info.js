@@ -49,15 +49,40 @@ window.addEventListener("load", function () {
     XHR.send(FD);
   }
 
+  function sendDelete() {
+    const XHR = new XMLHttpRequest();
+
+    // Define what happens on successful data submission
+    XHR.addEventListener("load", function(event) {
+      //alert(event.target.responseText);
+      window.location.href = "/restaurants";
+    } );
+
+    // Define what happens in case of error
+    XHR.addEventListener("error", function(event) {
+      alert('Oops! Something went wrong.');
+    } );
+
+    // Configure request
+    XHR.open("DELETE", "/restaurants/" + restaurant.id.toString());
+
+    // Open connection and send request
+    XHR.send();
+  }
+
   // Access the form element...
   const form = document.getElementById("editForm");
-
   // ...and take over its submit event.
   form.addEventListener("submit", function (event) {
     event.preventDefault();
-
     sendData();
   } );
+  
+  // Access the delete button
+  const delBtn = document.getElementById("delBtn");
+  delBtn.addEventListener("click", function(){
+    sendDelete();
+  });
 } );
 
 /**

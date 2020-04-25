@@ -320,3 +320,44 @@ def update_restaurant(id):
                     for error in f_errors:
                         flash(field + ': ' + error, 'error')
         abort(404)
+
+'''
+DELETE /restaurants/<id>
+    Where <id> is the existing model id.
+    It should respond with a 404 error if <id> is not found.
+    It should delete the corresponding row for <id>
+    It should require the 'delete:restaurants' permission.
+    Returns status code 200 and json {"success": True, "delete": id,
+    "name": restaurant.name} where id is the id of the deleted record or
+    appropriate status code indicating reason for failure.
+'''
+@app.route('/restaurants/<int:id>', methods=['DELETE'])
+@requires_auth
+def delete_restaurant(id):
+    try:
+        restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
+        if restaurant == None:
+            abort(404)
+        else:
+            reviews = Review.query.filter(Review.restaurant_id == id).all()
+            if len(reviews) != 0:
+                for review in reviews:
+                    review.delete()
+
+            restaurant.delete()
+            flash(restaurant.name + ' was successfully deleted.', 'success')
+            return jsonify({
+                    "success": True,
+                    "delete": id,
+                    "name": restaurant.name
+                })
+
+    except Exception:
+        db.session.rollback()
+        print(sys.exc_info())
+        flash('An error occurred. The restaurant could not be deleted.', 'error')
+        return jsonify({
+                "success": False,
+                "delete": id,
+                "name": None
+            })
