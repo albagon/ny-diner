@@ -361,3 +361,29 @@ def delete_restaurant(id):
                 "delete": id,
                 "name": None
             })
+
+# Error handler for 401
+@app.errorhandler(401)
+def unauthorized(error):
+    return jsonify({
+                    "success": False,
+                    "error": 401,
+                    "message": "unauthorized"
+                    }), 401
+
+# Error handler for 404
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+                    "success": False,
+                    "error": 404,
+                    "message": "resource not found"
+                    }), 404
+
+@app.errorhandler(422)
+def unprocessable(error):
+    return jsonify({
+                    "success": False,
+                    "error": 422,
+                    "message": "unprocessable"
+                    }), 422
