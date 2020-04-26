@@ -141,22 +141,24 @@ GET /restaurants/<id>
 @app.route('/restaurants/<int:id>')
 @requires_auth
 def get_restaurant(id):
-    restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
-    if restaurant == None:
+    try:
+        restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
+        if restaurant != None:
+            reviews = Review.query.filter(Review.restaurant_id == id).all()
+            if len(reviews) != 0:
+                reviews_format = []
+                for review in reviews:
+                    reviews_format.append(review.format())
+            else:
+                reviews_format = False
+            return render_template('restaurant.html',
+                                       success=True,
+                                       userinfo=session['profile'],
+                                       restaurant=restaurant.long(),
+                                       reviews=reviews_format,
+                                       form=restaurant.to_form())
+    except Exception:
         abort(404)
-    reviews = Review.query.filter(Review.restaurant_id == id).all()
-    if len(reviews) != 0:
-        reviews_format = []
-        for review in reviews:
-            reviews_format.append(review.format())
-    else:
-        reviews_format = False
-    return render_template('restaurant.html',
-                               success=True,
-                               userinfo=session['profile'],
-                               restaurant=restaurant.long(),
-                               reviews=reviews_format,
-                               form=restaurant.to_form())
 
 '''
 GET /restaurants/<id>/new_reviews
@@ -165,14 +167,18 @@ GET /restaurants/<id>/new_reviews
 @app.route('/restaurants/<int:id>/new_reviews', methods=['GET'])
 @requires_auth
 def create_review_form(id):
-    restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
-    if restaurant == None:
+    try:
+        restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
+        if restaurant != None:
+            form = ReviewForm()
+            return render_template('forms/new_review.html',
+                                     userinfo=session['profile'],
+                                     restaurant=restaurant,
+                                     form=form)
+        else:
+            abort(404)
+    except Exception:
         abort(404)
-    form = ReviewForm()
-    return render_template('forms/new_review.html',
-                             userinfo=session['profile'],
-                             restaurant=restaurant,
-                             form=form)
 
 '''
 POST /restaurants/<id>/new_reviews
@@ -214,10 +220,13 @@ GET /new_restaurants
 @app.route('/new_restaurants', methods=['GET'])
 @requires_auth
 def create_restaurant_form():
-    form = RestaurantForm()
-    return render_template('forms/new_restaurant.html',
-                             userinfo=session['profile'],
-                             form=form)
+    try:
+        form = RestaurantForm()
+        return render_template('forms/new_restaurant.html',
+                                 userinfo=session['profile'],
+                                 form=form)
+    except Exception:
+        abort(404)
 
 '''
 POST /new_restaurants
@@ -280,28 +289,29 @@ def update_restaurant(id):
     try:
         form = RestaurantForm(request.form)
         restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
-        if restaurant == None:
-            abort(404)
-        elif form.validate_on_submit():
-            op_hours = format_operating_hours(form)
-            if op_hours['success']:
-                restaurant.name = form.name.data,
-                restaurant.borough = form.borough.data,
-                restaurant.photograph = form.photograph.data,
-                restaurant.img_description = form.img_description.data,
-                restaurant.address = form.address.data,
-                restaurant.latlng[0] = float(form.lat.data),
-                restaurant.latlng[1] = float(form.lng.data),
-                restaurant.cuisine = form.cuisine.data,
-                restaurant.operating_hours = op_hours['week_hours']
-                restaurant.update()
+        if restaurant != None:
+            if form.validate_on_submit():
+                op_hours = format_operating_hours(form)
+                if op_hours['success']:
+                    restaurant.name = form.name.data,
+                    restaurant.borough = form.borough.data,
+                    restaurant.photograph = form.photograph.data,
+                    restaurant.img_description = form.img_description.data,
+                    restaurant.address = form.address.data,
+                    restaurant.latlng[0] = float(form.lat.data),
+                    restaurant.latlng[1] = float(form.lng.data),
+                    restaurant.cuisine = form.cuisine.data,
+                    restaurant.operating_hours = op_hours['week_hours']
+                    restaurant.update()
+                else:
+                    error = True
+                    message = 'Wrong formating of operating hours.'
             else:
                 error = True
-                message = 'Wrong formating of operating hours.'
+                message = 'The form contains invalid data.'
         else:
-            error = True
-            message = 'The form contains invalid data.'
-    except HTTPException:
+            abort(404)
+    except Exception:
         error = True
         message = 'The restaurant could not be updated.'
         db.session.rollback()
@@ -336,9 +346,7 @@ DELETE /restaurants/<id>
 def delete_restaurant(id):
     try:
         restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
-        if restaurant == None:
-            abort(404)
-        else:
+        if restaurant != None:
             reviews = Review.query.filter(Review.restaurant_id == id).all()
             if len(reviews) != 0:
                 for review in reviews:
@@ -351,16 +359,11 @@ def delete_restaurant(id):
                     "delete": id,
                     "name": restaurant.name
                 })
-
     except Exception:
         db.session.rollback()
         print(sys.exc_info())
         flash('An error occurred. The restaurant could not be deleted.', 'error')
-        return jsonify({
-                "success": False,
-                "delete": id,
-                "name": None
-            })
+    return abort(404)
 
 # Error handler for 401
 @app.errorhandler(401)
