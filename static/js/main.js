@@ -187,10 +187,10 @@ createRestaurantHTML = (restaurant = self.restaurant) => {
   borough.innerHTML = restaurant.borough;
   li.append(borough);
 
-  const more = document.createElement('a');
+  const more = document.createElement('button');
   more.setAttribute('aria-label', restaurant.name+' view details');
   more.innerHTML = 'View Details';
-  more.href = DBHelper.urlForRestaurant(restaurant);
+  more.onclick = function() {getRestaurantDetails(restaurant.id)};
   li.append(more)
 
   return li
@@ -225,3 +225,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 } */
+
+getRestaurantDetails = (id) => {
+  alert('Well done number ' + id + '! Now we need to make XMLHttpRequest')
+}

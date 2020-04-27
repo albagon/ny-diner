@@ -80,7 +80,7 @@ ENDPOINTS for Restaurants and Reviews
 
 '''
 GET /restaurants
-    It requires authentication.
+    It requires authentication but no special permissions.
     It should contain only the Restaurant.short() data representation.
     On success, this endpoint returns status code 200 and the list of
     restaurants. On failure, it aborts with a 404 error code.
