@@ -28,23 +28,6 @@ CORS(app)
 db_drop_and_create_all()
 
 '''
-Auth0 settings
-'''
-oauth = OAuth(app)
-
-auth0 = oauth.register(
-    'auth0',
-    client_id = os.getenv("AUTH0_CLIENT_ID"),
-    client_secret = os.getenv("AUTH0_CLIENT_SECRET"),
-    api_base_url = 'https://full.eu.auth0.com',
-    access_token_url = 'https://full.eu.auth0.com/oauth/token',
-    authorize_url = 'https://full.eu.auth0.com/authorize',
-    client_kwargs = {
-        'scope': 'openid profile email',
-    },
-)
-
-'''
 INSERT records into db
 '''
 populate_db()
@@ -55,24 +38,12 @@ Auth0 routes
 # Auth0 redirects the user to this route after they have authenticated.
 @app.route('/callback')
 def callback_handling():
-    # Handles response from token endpoint
-    auth0.authorize_access_token()
-    resp = auth0.get('userinfo')
-    userinfo = resp.json()
-
-    # Store the user information in flask session.
-    session['jwt_payload'] = userinfo
     session['profile'] = {
-        'user_id': userinfo['sub'],
-        'name': userinfo['name'],
-        'picture': userinfo['picture']
+        'user_id': "userinfo['sub']",
+        'name': "Diner",
+        'picture': "userinfo['picture']"
     }
     return redirect('/restaurants')
-
-# This route uses the Authlib client instance to redirect the user to the login page.
-@app.route('/login')
-def login():
-    return auth0.authorize_redirect(redirect_uri='http://localhost:5000/callback')
 
 # Decorator that checks if the user has authenticated.
 def requires_auth(f):
@@ -88,7 +59,11 @@ def requires_auth(f):
 # This route renders once the user has logged out.
 @app.route('/')
 def home():
-    return render_template('home.html')
+    link = ('https://'+ os.getenv("AUTH0_DOMAIN")
+            + '/authorize?audience=' + os.getenv("AUTH0_AUDIENCE")
+            + '&response_type=token&client_id=' + os.getenv("AUTH0_CLIENT_ID")
+            + '&redirect_uri=' + os.getenv("AUTH0_CALLBACK_URL"))
+    return render_template('home.html', link=link)
 
 # Log the user out and clear the data from the session.
 @app.route('/logout')
@@ -97,7 +72,7 @@ def logout():
     session.clear()
     # Redirect user to logout endpoint
     params = {'returnTo': url_for('home', _external=True), 'client_id': os.getenv("AUTH0_CLIENT_ID")}
-    return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
+    return redirect('https://' + os.getenv("AUTH0_DOMAIN") + '/v2/logout?' + urlencode(params))
 
 '''
 ENDPOINTS for Restaurants and Reviews
@@ -123,7 +98,6 @@ def get_restaurants():
                 restaurants_short.append(restaurant.short())
         return render_template('dashboard.html',
                                    userinfo=session['profile'],
-                                   userinfo_pretty=json.dumps(session['jwt_payload'], indent=4),
                                    success=True,
                                    restaurants=restaurants_short)
     except Exception:
