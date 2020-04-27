@@ -9,4 +9,4 @@ requests
 authlib
 six
 python-jose-cryptodome==1.3.2
-pycryptodome==3.3.1
+pycryptodome==3.6.6
