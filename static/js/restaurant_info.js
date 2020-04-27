@@ -33,8 +33,8 @@ window.addEventListener("load", function () {
 
     // Define what happens on successful data submission
     XHR.addEventListener("load", function(event) {
-      //alert(event.target.responseText);
-      window.location.href = "/restaurants/" + restaurant.id.toString();
+      alert(event.target.responseText);
+      //window.location.href = "/restaurants/" + restaurant.id.toString();
     } );
 
     // Define what happens in case of error
@@ -77,7 +77,7 @@ window.addEventListener("load", function () {
     event.preventDefault();
     sendData();
   } );
-  
+
   // Access the delete button
   const delBtn = document.getElementById("delBtn");
   delBtn.addEventListener("click", function(){

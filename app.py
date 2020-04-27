@@ -15,6 +15,7 @@ import sys
 from models import db, setup_db, db_drop_and_create_all, Restaurant, Review
 from data import populate_db
 from forms import *
+from auth import AuthError, requires_auth_p
 
 # Load environment variables from dot env file.
 load_dotenv()
@@ -114,7 +115,8 @@ GET /restaurants/<id>
 '''
 @app.route('/restaurants/<int:id>')
 @requires_auth
-def get_restaurant(id):
+@requires_auth_p('get:restaurants')
+def get_restaurant(payload, id):
     try:
         restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
         if restaurant != None:
@@ -125,12 +127,15 @@ def get_restaurant(id):
                     reviews_format.append(review.format())
             else:
                 reviews_format = False
+            '''
             return render_template('restaurant.html',
                                        success=True,
                                        userinfo=session['profile'],
                                        restaurant=restaurant.long(),
                                        reviews=reviews_format,
                                        form=restaurant.to_form())
+            '''
+            return restaurant.long()
     except Exception:
         abort(404)
 

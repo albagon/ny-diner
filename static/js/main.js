@@ -247,7 +247,7 @@ getRestaurantDetails = (id) => {
   XHR.open("GET", "/restaurants/" + id.toString());
 
   // Add Authorization header
-  XHR.setRequestHeader("Authorization", jwt);
+  XHR.setRequestHeader("Authorization", "bearer " + jwt);
 
   // Send the request without data
   XHR.send();
