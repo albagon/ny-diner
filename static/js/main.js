@@ -227,5 +227,28 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 } */
 
 getRestaurantDetails = (id) => {
-  alert('Well done number ' + id + '! Now we need to make XMLHttpRequest')
+  jwt = localStorage.getItem("JWTS_LOCAL_KEY");
+  alert('Well done number ' + id + '! Now we need to make XMLHttpRequest' + jwt);
+
+  const XHR = new XMLHttpRequest();
+
+  // Define what happens on successful data submission
+  XHR.addEventListener("load", function(event) {
+    //window.location.href = "/restaurants/" + id.toString();
+    alert('Success: ' + event.target.responseText);
+  } );
+
+  // Define what happens in case of error
+  XHR.addEventListener("error", function(event) {
+    alert('Oops! Something went wrong.');
+  } );
+
+  // Set up our request
+  XHR.open("GET", "/restaurants/" + id.toString());
+
+  // Add Authorization header
+  XHR.setRequestHeader("Authorization", jwt);
+
+  // Send the request without data
+  XHR.send();
 }
