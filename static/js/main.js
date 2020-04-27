@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   self.restaurants = JSON.parse(document.getElementById("map").dataset.restaurants);
   fetchFilters();
   initMap();
+  Auth.check_token_fragment();
 });
 
 /**
