@@ -45,7 +45,7 @@ def create_app(test_config = None):
             'name': "Diner",
             'picture': "userinfo['picture']"
         }
-        return redirect('/restaurants')
+        return render_template('catcher.html')
 
     # Decorator that checks if the user has authenticated.
     def requires_auth(f):
@@ -60,12 +60,12 @@ def create_app(test_config = None):
 
     # This route renders once the user has logged out.
     @app.route('/')
-    def home():
+    def index():
         link = ('https://'+ os.getenv("AUTH0_DOMAIN")
                 + '/authorize?audience=' + os.getenv("AUTH0_AUDIENCE")
                 + '&response_type=token&client_id=' + os.getenv("AUTH0_CLIENT_ID")
                 + '&redirect_uri=' + os.getenv("AUTH0_CALLBACK_URL"))
-        return render_template('home.html', link=link)
+        return render_template('index.html', link=link)
 
     # Log the user out and clear the data from the session.
     @app.route('/logout')
@@ -73,7 +73,7 @@ def create_app(test_config = None):
         # Clear session stored data
         session.clear()
         # Redirect user to logout endpoint
-        params = {'returnTo': url_for('home', _external=True), 'client_id': os.getenv("AUTH0_CLIENT_ID")}
+        params = {'returnTo': url_for('index', _external=True), 'client_id': os.getenv("AUTH0_CLIENT_ID")}
         return redirect('https://' + os.getenv("AUTH0_DOMAIN") + '/v2/logout?' + urlencode(params))
 
     '''
@@ -82,15 +82,15 @@ def create_app(test_config = None):
 
     '''
     GET /restaurants
-        It requires authentication but no special permissions.
+        It requires 'get:restaurants' permission.
         It should contain only the Restaurant.short() data representation.
-        On success, this endpoint returns status code 200 and the list of
-        restaurants. On failure, it aborts with a 404 error code.
-        This route also returns the user information stored in the Flask session.
+        On success, this endpoint returns status code 200, the list of
+        restaurants and the total number of restaurants. On failure, it aborts
+        with a 404 error code.
     '''
     @app.route('/restaurants')
-    @requires_auth
-    def get_restaurants():
+    @requires_auth_p('get:restaurants')
+    def get_restaurants(payload):
         try:
             restaurants = Restaurant.query.all()
             restaurants_short = []
@@ -98,10 +98,11 @@ def create_app(test_config = None):
                 any_restaurants = True
                 for restaurant in restaurants:
                     restaurants_short.append(restaurant.short())
-            return render_template('dashboard.html',
-                                       userinfo=session['profile'],
-                                       success=True,
-                                       restaurants=restaurants_short)
+            return jsonify({
+                'success': True,
+                'restaurants': restaurants_short,
+                'total_restaurants': len(restaurants_short)
+            })
         except Exception:
             abort(404)
 

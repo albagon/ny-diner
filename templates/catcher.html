@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Welcome - New York Diner</title>
+  <meta name="description" content="Welcome to New York Diner's catalogue of restaurants.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Normalize.css for better cross-browser consistency -->
+  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+  <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+  <div class="login-wrapper">
+    <div class="login-prompt">
+        <!-- <img src="{{ url_for('static', filename='img/icon-192x192.png') }}" /> -->
+        <h3>WELCOME TO New York Diner</h3>
+        <button onclick="getRestaurants()" aria-label="View Restaurants">Go to Catalogue</button>
+    </div>
+  </div>
+  <script charset="utf-8" src="static/js/auth.js"></script>
+  <script charset="utf-8" src="static/js/catcher.js"></script>
+</body>
+
+</html>
