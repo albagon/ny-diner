@@ -47,17 +47,6 @@ def create_app(test_config = None):
         }
         return render_template('catcher.html')
 
-    # Decorator that checks if the user has authenticated.
-    def requires_auth(f):
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            if 'profile' not in session:
-                # Redirect to Login page here
-                return redirect('/')
-            return f(*args, **kwargs)
-
-        return decorated
-
     # This route renders once the user has logged out.
     @app.route('/')
     def index():
@@ -84,6 +73,7 @@ def create_app(test_config = None):
     GET /restaurants
         It requires 'get:restaurants' permission.
         It should contain only the Restaurant.short() data representation.
+        Please refer to README file for further details.
         On success, this endpoint returns status code 200, the list of
         restaurants and the total number of restaurants. On failure, it aborts
         with a 404 error code.
@@ -110,8 +100,10 @@ def create_app(test_config = None):
 
     '''
     GET /restaurants/<id>
+        Where <id> is the existing model id.
         It requires 'get:restaurants' permission.
         It should contain the Restaurant.long() data representation.
+        Please refer to README file for further details.
         On success, this endpoint returns status code 200, the restaurant data,
         and a list of reviews on that restaurant.
         On failure, it aborts with a 404 error code.
@@ -142,7 +134,12 @@ def create_app(test_config = None):
 
     '''
     POST /restaurants/<id>/new_reviews
-        Post a new review in db.
+        It requires 'post:reviews' permission.
+        It receives a request in json format containing the data for the new
+        review. Please refer to README file for further details.
+        On success, this endpoint returns status code 200 and the new created
+        review in json format.
+        On failure, it aborts with a 422 error code.
     '''
     @app.route('/restaurants/<int:id>/new_reviews', methods=['POST'])
     @requires_auth_p('post:reviews')
@@ -182,7 +179,12 @@ def create_app(test_config = None):
 
     '''
     POST /new_restaurants
-        Post a new restaurant in db.
+        It requires 'post:restaurants' permission.
+        It receives a request in json format containing the data for the new
+        restaurant. Please refer to README file for further details.
+        On success, this endpoint returns status code 200 and the new created
+        restaurant in json format.
+        On failure, it aborts with a 422 error code.
     '''
     @app.route('/new_restaurants', methods=['POST'])
     @requires_auth_p('post:restaurants')
@@ -227,10 +229,12 @@ def create_app(test_config = None):
     '''
     PATCH /restaurants/<id>
         Where <id> is the existing model id.
-        It should respond with a 404 error if <id> is not found.
-        It should update the corresponding row for <id>
-        It should require the 'patch:restaurants' permission.
-        It should contain the restaurant.long() data representation.
+        It requires 'patch:restaurants' permission.
+        It receives a request in json format containing the new data for the
+        existing restaurant. Please refer to README file for further details.
+        On success, this endpoint returns status code 200 and the updated
+        restaurant in json format.
+        On failure, it aborts with a 404 error code.
     '''
     @app.route('/restaurants/<int:id>', methods=['PATCH'])
     @requires_auth_p('patch:restaurants')
@@ -271,12 +275,12 @@ def create_app(test_config = None):
     '''
     DELETE /restaurants/<id>
         Where <id> is the existing model id.
-        It should respond with a 404 error if <id> is not found.
-        It should delete the corresponding row for <id>
-        It should require the 'delete:restaurants' permission.
-        Returns status code 200 and json {"success": True, "delete": id,
-        "name": restaurant.name} where id is the id of the deleted record or
-        appropriate status code indicating reason for failure.
+        It requires 'delete:restaurants' permission.
+        It doesn't expect a request in json format containing any data.
+        Please refer to README file for further details.
+        On success, this endpoint returns status code 200 and the id and name
+        of the deleted restaurant in json format.
+        On failure, it aborts with a 404 error code.
     '''
     @app.route('/restaurants/<int:id>', methods=['DELETE'])
     @requires_auth_p('delete:restaurants')
@@ -304,7 +308,7 @@ def create_app(test_config = None):
             print('An error occurred. The restaurant could not be deleted.')
             abort(404)
 
-    # Error handler for 401
+    # Error handlers for common status codes
     @app.errorhandler(401)
     def unauthorized(error):
         return jsonify({
@@ -313,7 +317,6 @@ def create_app(test_config = None):
                         "message": "unauthorized"
                         }), 401
 
-    # Error handler for 404
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
