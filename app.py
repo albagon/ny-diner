@@ -108,15 +108,13 @@ def create_app(test_config = None):
 
     '''
     GET /restaurants/<id>
-        It should be a public endpoint.
+        It requires 'get:restaurants' permission.
         It should contain the Restaurant.long() data representation.
         On success, this endpoint returns status code 200, the restaurant data,
         and a list of reviews on that restaurant.
         On failure, it aborts with a 404 error code.
-        This route also returns the user information stored in the Flask session.
     '''
     @app.route('/restaurants/<int:id>')
-    @requires_auth
     @requires_auth_p('get:restaurants')
     def get_restaurant(payload, id):
         try:
@@ -129,15 +127,12 @@ def create_app(test_config = None):
                         reviews_format.append(review.format())
                 else:
                     reviews_format = False
-                '''
-                return render_template('restaurant.html',
-                                           success=True,
-                                           userinfo=session['profile'],
-                                           restaurant=restaurant.long(),
-                                           reviews=reviews_format,
-                                           form=restaurant.to_form())
-                '''
-                return restaurant.long()
+                    
+                return jsonify({
+                    'success': True,
+                    'restaurant': restaurant.long(),
+                    'reviews': reviews_format
+                })
         except Exception:
             abort(404)
 
