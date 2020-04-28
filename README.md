@@ -59,7 +59,8 @@ This application features a complete Flask-SQLAlchemy server with a set of
 endpoints. Auth0 has been integrated for authentication.
 
 The original website sources its data from a JSON file but now, a new Postgresql
-Database has been integrated, along with other authentication features.
+Database has been integrated, along with other authentication features. For more information about the endpoint please visit the [NY Diner collection in Postman](https://documenter.getpostman.com/view/10562557/SzfDxQmm?version=latest)
+Please notice the jwt tokens should be obtain by logging into the app and then copied to a variable in the collection's environment. For testing purposes, 3 user have been created: the Diner, the Restaurateur and the NYdiner_admin. Each one with a different set of permissions.
 
 Two models are created in the database:
 1. Restaurants
@@ -75,20 +76,20 @@ Two models are created in the database:
         - Enable RBAC
         - Enable Add Permissions in the Access Token
 5. Create new API permissions:
+    - `get:restaurants`
     - `post:restaurants`
     - `post:reviews`
     - `patch:restaurants`
     - `delete:restaurants`
-    - `delete:reviews`
 6. Create new roles for:
     - Diner
-        - can `post:reviews`
+        - can `get:restaurants`, `post:reviews`
     - Restaurateur
         - can perform all Diner actions
         - can `post:restaurants`, `patch:restaurants`
     - App_admin
         - can perform all Restaurateur actions
-        - can `delete:restaurants`, `delete:reviews`
+        - can `delete:restaurants`
 7. Create the `.env` file in the root of your app and add your Auth0 variables and values to it.
 ```
 # .env
@@ -97,7 +98,7 @@ AUTH0_DOMAIN=YOUR_AUTH0_DOMAIN
 AUTH0_CLIENT_SECRET=YOUR_CLIENT_SECRET
 ```
 
-### Running the server
+### Before running the server
 
 Remember to “cd” into the application’s folder. To run the development server:
 
@@ -110,15 +111,41 @@ $  source env/bin/activate
 ```
 $ pip3 install -r requirements.txt
 ```
-3. Run the development server:
+3. Set the environment variables:
 ```
-$ export DATABASE_URL={the value of SQLALCHEMY_DATABASE_URI}
-$ export FLASK_APP=app.py
+$ export DATABASE_URL=the_url_to_your_local_database
+$ export DATABASE_TEST_URL=the_url_to_your_local_testing_database
+$ export USER_TYPE=DINER or RESTAURATEUR or NYDINER_ADMIN
+$ export TOKEN_DINER=a_new_token_for_diner_user_type
+$ export TOKEN_RESTAURATEUR=a_new_token_for_restaurateur_user_type
+$ export TOKEN_NYDINER_ADMIN=a_new_token_for_nydiner_admin_user_type
+```
+The easiest way of getting a jwt while using this app is visiting the login page y copy the access code from the returned URL.
+4. Create all the tables
+```
+flask db upgrade
+```
+
+### DEVELOPMENT SERVER
+1. Set more environment variables:
+```
 $ export FLASK_DEBUG=True
 $ export FLASK_ENV=development
-$ flask run
 ```
-4. Navigate to Home page [http://localhost:5000](http://localhost:5000)
+2. Run the development server:
+```
+python app.py
+```
+3. Navigate to Home page [http://localhost:5000](http://localhost:5000)
+
+### DEPLOYED AT HEROKU
+Visit [nydiner live](https://nydiner.herokuapp.com/).
+
+### RUNNING UNIT TESTS
+
+1. Make sure you have set environment variables for: USER_TYPE (IT CAN BE DINER, RESTAURATEUR OR NYDINER), DATABASE_TEST_URL, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID
+
+2. python3 test_app.py -v
 
 ## Frontend
 
