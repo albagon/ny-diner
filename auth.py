@@ -83,14 +83,14 @@ verify_decode_jwt(token) method
 '''
 def verify_decode_jwt(token):
     # GET THE PUBLIC KEY FROM AUTH0
-    print('inside verify decode jwt', AUTH0_DOMAIN)
+    #print('inside verify decode jwt', AUTH0_DOMAIN)
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
-    print('jsonurl', jsonurl)
+    #print('jsonurl', jsonurl)
     jwks = json.loads(jsonurl.read())
 
     # GET THE DATA IN THE HEADER
     unverified_header = jwt.get_unverified_header(token)
-    print('unverified header', unverified_header)
+    #print('unverified header', unverified_header)
 
     # CHOOSE OUR KEY
     rsa_key = {}
@@ -114,7 +114,7 @@ def verify_decode_jwt(token):
     if rsa_key:
         try:
             # USE THE KEY TO VALIDATE THE JWT
-            print('env variables', ALGORITHMS, API_AUDIENCE)
+            #print('env variables', ALGORITHMS, API_AUDIENCE)
             payload = jwt.decode(
                 token,
                 rsa_key,
@@ -122,7 +122,7 @@ def verify_decode_jwt(token):
                 audience=API_AUDIENCE,
                 issuer=f'https://{AUTH0_DOMAIN}/'
             )
-            print('payload', payload)
+            #print('payload', payload)
             return payload
 
         except jwt.ExpiredSignatureError:
@@ -163,7 +163,7 @@ def requires_auth(permission=''):
         @wraps(f)
         def wrapper(*args, **kwargs):
             jwt = get_token_auth_header()
-            print('jwt', jwt)
+            #print('jwt', jwt)
             try:
                 payload = verify_decode_jwt(jwt)
             except Exception:

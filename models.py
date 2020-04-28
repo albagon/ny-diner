@@ -29,7 +29,7 @@ def dropTables():
         connection = create_engine(database_path)
         connection.execute('drop table if exists reviews')
         connection.execute('drop table if exists restaurants')
-        print('nothing...')
+        #print('nothing...')
 
 def db_create_all():
     db.create_all()
