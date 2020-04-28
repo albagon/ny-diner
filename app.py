@@ -127,7 +127,7 @@ def create_app(test_config = None):
                         reviews_format.append(review.format())
                 else:
                     reviews_format = False
-                    
+
                 return jsonify({
                     'success': True,
                     'restaurant': restaurant.long(),
@@ -137,45 +137,28 @@ def create_app(test_config = None):
             abort(404)
 
     '''
-    GET /restaurants/<id>/new_reviews
-        Renders the template associated with the new_review form.
-    '''
-    @app.route('/restaurants/<int:id>/new_reviews', methods=['GET'])
-    @requires_auth
-    def create_review_form(id):
-        try:
-            restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
-            if restaurant != None:
-                form = ReviewForm()
-                return render_template('forms/new_review.html',
-                                         userinfo=session['profile'],
-                                         restaurant=restaurant,
-                                         form=form)
-            else:
-                abort(404)
-        except Exception:
-            abort(404)
-
-    '''
     POST /restaurants/<id>/new_reviews
         Post a new review in db.
     '''
     @app.route('/restaurants/<int:id>/new_reviews', methods=['POST'])
-    @requires_auth
-    def create_review_submission(id):
+    @requires_auth_p('post:reviews')
+    def create_review_submission(payload, id):
         error = False
-        body = {}
         try:
-            form = request.form
+            body = request.get_json()
             review = Review(
                 restaurant_id = id,
-                name = form['name'],
+                name = body.get('name', ''),
                 date = datetime.now(),
-                rating = form['rating'],
-                comments = form['comments']
+                rating = body.get('rating', 1),
+                comments = body.get('comments', '')
             )
             review.insert()
-            body['name'] = form['name']
+            new_review = Review.query.filter(Review.id == review.id).one_or_none()
+            if new_review != None:
+                new_review_f = new_review.format()
+            else:
+                error = True
         except:
             error = True
             db.session.rollback()
@@ -183,11 +166,15 @@ def create_app(test_config = None):
         finally:
             db.session.close()
         if not error:
-            # on successful db insert, flash success
-            flash('Thank you ' + body['name'] + ' for your review.', 'success')
+            # on successful db insert, print success
+            print('Success post review')
+            return jsonify({
+                'success': True,
+                'review': new_review_f
+            })
         else:
-            flash('An error occurred. Review could not be listed.', 'error')
-        return redirect('/restaurants/'+str(id)+'/new_reviews')
+            print('An error occurred. Review could not be listed.')
+            abort(422)
 
     '''
     GET /new_restaurants
