@@ -142,7 +142,7 @@ def verify_decode_jwt(token):
             }, 400)
 
 '''
-@requires_auth_p(permission) decorator method
+@requires_auth(permission) decorator method
     @INPUTS
         permission: string permission (i.e. 'get:restaurants')
 
@@ -153,12 +153,11 @@ def verify_decode_jwt(token):
     Return the decorator which passes the decoded payload to the decorated
     method.
 '''
-def requires_auth_p(permission=''):
+def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
             jwt = get_token_auth_header()
-            print('jwt ', jwt)
             try:
                 payload = verify_decode_jwt(jwt)
             except Exception:

@@ -15,7 +15,7 @@ import sys
 from models import db, setup_db, db_drop_and_create_all, Restaurant, Review
 from data import populate_db
 from forms import *
-from auth import AuthError, requires_auth_p
+from auth import AuthError, requires_auth
 
 def create_app(test_config = None):
     # Load environment variables from dot env file.
@@ -79,7 +79,7 @@ def create_app(test_config = None):
         with a 404 error code.
     '''
     @app.route('/restaurants')
-    @requires_auth_p('get:restaurants')
+    @requires_auth('get:restaurants')
     def get_restaurants(payload):
         try:
             restaurants = Restaurant.query.all()
@@ -109,7 +109,7 @@ def create_app(test_config = None):
         On failure, it aborts with a 404 error code.
     '''
     @app.route('/restaurants/<int:id>')
-    @requires_auth_p('get:restaurants')
+    @requires_auth('get:restaurants')
     def get_restaurant(payload, id):
         try:
             restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
@@ -142,7 +142,7 @@ def create_app(test_config = None):
         On failure, it aborts with a 422 error code.
     '''
     @app.route('/restaurants/<int:id>/new_reviews', methods=['POST'])
-    @requires_auth_p('post:reviews')
+    @requires_auth('post:reviews')
     def create_review_submission(payload, id):
         error = False
         try:
@@ -187,7 +187,7 @@ def create_app(test_config = None):
         On failure, it aborts with a 422 error code.
     '''
     @app.route('/new_restaurants', methods=['POST'])
-    @requires_auth_p('post:restaurants')
+    @requires_auth('post:restaurants')
     def create_restaurant_submission(payload):
         error = False
         try:
@@ -237,7 +237,7 @@ def create_app(test_config = None):
         On failure, it aborts with a 404 error code.
     '''
     @app.route('/restaurants/<int:id>', methods=['PATCH'])
-    @requires_auth_p('patch:restaurants')
+    @requires_auth('patch:restaurants')
     def update_restaurant(payload, id):
         error = False
         try:
@@ -283,7 +283,7 @@ def create_app(test_config = None):
         On failure, it aborts with a 404 error code.
     '''
     @app.route('/restaurants/<int:id>', methods=['DELETE'])
-    @requires_auth_p('delete:restaurants')
+    @requires_auth('delete:restaurants')
     def delete_restaurant(payload, id):
         try:
             restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
