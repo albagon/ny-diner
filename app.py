@@ -275,7 +275,7 @@ def create_app(test_config = None):
                     })
         else:
             print('An error occurred. Restaurant not updated.')
-            abort(404)
+            abort(422)
 
     '''
     DELETE /restaurants/<id>

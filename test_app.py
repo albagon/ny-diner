@@ -174,6 +174,77 @@ class NydinerTestCase(unittest.TestCase):
             self.assertEqual(data['success'], False)
             self.assertEqual(data['message'], 'unprocessable')
 
+    #Tests for PATCH /restaurants/<id> endpoint
+    def test_patch_restaurant(self):
+        new_restaurant = {
+            "name": "Mission Chinese Food5",
+            "borough": "Manhattan",
+            "photograph": "https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668",
+            "img_description": "An inside view of a busy restaurant with all tables ocupied by people enjoying their meal",
+            "address": "171 E Broadway, New York, NY 10002",
+            "latlng": {
+              "lat": 40.713829,
+              "lng": -73.989667
+            },
+            "cuisine": "Chinese",
+            "operating_hours": {
+              "Monday": "5:30 pm - 11:00 pm",
+              "Tuesday": "5:30 pm - 12:00 am",
+              "Wednesday": "5:30 pm - 12:00 am",
+              "Thursday": "5:30 pm - 12:00 am",
+              "Friday": "5:30 pm - 12:00 am",
+              "Saturday": "12:00 pm - 4:00 pm",
+              "Sunday": "12:00 pm - 4:00 pm"
+            }
+        }
+        token = NydinerTestCase.get_access_token('DINER')
+        res = self.client().patch('/restaurants/1', headers={'Authorization': f'Bearer {token}'}, json=new_restaurant)
+        data = json.loads(res.data)
+
+        if os.environ['USER_TYPE'] == 'DINER':
+            self.assertEqual(res.status_code, 401)
+            self.assertEqual(data['success'], False)
+            self.assertEqual(data['message'], 'unauthorized')
+        else:
+            self.assertEqual(res.status_code, 200)
+            self.assertEqual(data['success'], True)
+            self.assertTrue(data['restaurant'])
+
+    def test_404_if_wrong_restaurant_id(self):
+        new_restaurant = {
+            "name": "Mission Chinese Food5",
+            "borough": "Manhattan",
+            "photograph": "https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668",
+            "img_description": "An inside view of a busy restaurant with all tables ocupied by people enjoying their meal",
+            "address": "171 E Broadway, New York, NY 10002",
+            "latlng": {
+              "lat": 40.713829,
+              "lng": -73.989667
+            },
+            "cuisine": "Chinese",
+            "operating_hours": {
+              "Monday": "5:30 pm - 11:00 pm",
+              "Tuesday": "5:30 pm - 12:00 am",
+              "Wednesday": "5:30 pm - 12:00 am",
+              "Thursday": "5:30 pm - 12:00 am",
+              "Friday": "5:30 pm - 12:00 am",
+              "Saturday": "12:00 pm - 4:00 pm",
+              "Sunday": "12:00 pm - 4:00 pm"
+            }
+        }
+        token = NydinerTestCase.get_access_token('DINER')
+        res = self.client().patch('/restaurants/133', headers={'Authorization': f'Bearer {token}'}, json=new_restaurant)
+        data = json.loads(res.data)
+
+        if os.environ['USER_TYPE'] == 'DINER':
+            self.assertEqual(res.status_code, 401)
+            self.assertEqual(data['success'], False)
+            self.assertEqual(data['message'], 'unauthorized')
+        else:
+            self.assertEqual(res.status_code, 404)
+            self.assertEqual(data['success'], False)
+            self.assertEqual(data['message'], 'resource not found')
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
