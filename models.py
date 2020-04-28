@@ -24,8 +24,14 @@ def setup_db(app, database_path = database_path):
 Drop the database tables and start fresh
 Initialize a clean database
 '''
+def dropTables():
+        connection = create_engine(database_path)
+        connection.execute('drop table if exists reviews')
+        connection.execute('drop table if exists restaurants')
+        print('nothing...')
+
 def db_drop_and_create_all():
-    db.drop_all()
+    #db.drop_all()
     db.create_all()
 
 

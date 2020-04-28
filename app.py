@@ -12,7 +12,7 @@ from six.moves.urllib.parse import urlencode
 from datetime import datetime
 import sys
 
-from models import db, setup_db, db_drop_and_create_all, Restaurant, Review
+from models import db, setup_db, db_drop_and_create_all, Restaurant, Review, dropTables
 from data import populate_db
 from forms import *
 from auth import AuthError, requires_auth
@@ -27,6 +27,7 @@ def create_app(test_config = None):
 
     # Allow CORS for all domains on all routes
     CORS(app)
+    dropTables()
     db_drop_and_create_all()
 
     '''
