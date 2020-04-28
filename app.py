@@ -311,7 +311,7 @@ def create_app(test_config = None):
             db.session.rollback()
             print(sys.exc_info())
             print('An error occurred. The restaurant could not be deleted.')
-            abort(404)
+            abort(422)
 
     # Error handlers for common status codes
     @app.errorhandler(401)

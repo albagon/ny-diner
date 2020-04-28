@@ -245,6 +245,36 @@ class NydinerTestCase(unittest.TestCase):
             self.assertEqual(data['success'], False)
             self.assertEqual(data['message'], 'resource not found')
 
+    #Tests for DELETE /restaurants/<id> endpoint
+    def test_delete_restaurant(self):
+        token = NydinerTestCase.get_access_token('DINER')
+        res = self.client().delete('/restaurants/1', headers={'Authorization': f'Bearer {token}'})
+        data = json.loads(res.data)
+
+        if os.environ['USER_TYPE'] == 'DINER' or os.environ['USER_TYPE'] == 'RESTAURATEUR':
+            self.assertEqual(res.status_code, 401)
+            self.assertEqual(data['success'], False)
+            self.assertEqual(data['message'], 'unauthorized')
+        else:
+            self.assertEqual(res.status_code, 200)
+            self.assertEqual(data['success'], True)
+            self.assertTrue(data['delete'])
+            self.assertTrue(data['name'])
+
+    def test_404_if_delete_wrong_restaurant_id(self):
+        token = NydinerTestCase.get_access_token('DINER')
+        res = self.client().delete('/restaurants/134', headers={'Authorization': f'Bearer {token}'})
+        data = json.loads(res.data)
+
+        if os.environ['USER_TYPE'] == 'DINER' or os.environ['USER_TYPE'] == 'RESTAURATEUR':
+            self.assertEqual(res.status_code, 401)
+            self.assertEqual(data['success'], False)
+            self.assertEqual(data['message'], 'unauthorized')
+        else:
+            self.assertEqual(res.status_code, 404)
+            self.assertEqual(data['success'], False)
+            self.assertEqual(data['message'], 'resource not found')
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
