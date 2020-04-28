@@ -195,7 +195,7 @@ def create_app(test_config = None):
                 address = body.get('address', ''),
                 latlng = [float(latlng['lat']), float(latlng['lng'])],
                 cuisine = body.get('cuisine', ''),
-                operating_hours = body.get('operating_hours', {}),
+                operating_hours = body.get('operating_hours', {})
                 )
             restaurant.insert()
             new_restaurant = Restaurant.query.filter(Restaurant.id == restaurant.id).one_or_none()
@@ -229,32 +229,24 @@ def create_app(test_config = None):
         It should contain the restaurant.long() data representation.
     '''
     @app.route('/restaurants/<int:id>', methods=['PATCH'])
-    @requires_auth
-    def update_restaurant(id):
+    @requires_auth_p('patch:restaurants')
+    def update_restaurant(payload, id):
         error = False
         try:
-            form = RestaurantForm(request.form)
+            body = request.get_json()
             restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
             if restaurant != None:
-                if form.validate_on_submit():
-                    op_hours = format_operating_hours(form)
-                    if op_hours['success']:
-                        restaurant.name = form.name.data,
-                        restaurant.borough = form.borough.data,
-                        restaurant.photograph = form.photograph.data,
-                        restaurant.img_description = form.img_description.data,
-                        restaurant.address = form.address.data,
-                        restaurant.latlng[0] = float(form.lat.data),
-                        restaurant.latlng[1] = float(form.lng.data),
-                        restaurant.cuisine = form.cuisine.data,
-                        restaurant.operating_hours = op_hours['week_hours']
-                        restaurant.update()
-                    else:
-                        error = True
-                        message = 'Wrong formating of operating hours.'
-                else:
-                    error = True
-                    message = 'The form contains invalid data.'
+                latlng = body.get('latlng', {"lat":40, "lng":-73})
+                restaurant.name = body.get('name', '')
+                restaurant.borough = body.get('borough', '')
+                restaurant.photograph = body.get('photograph', '')
+                restaurant.img_description = body.get('img_description', '')
+                restaurant.address = body.get('address', '')
+                restaurant.latlng[0] = float(latlng['lat'])
+                restaurant.latlng[1] = float(latlng['lng'])
+                restaurant.cuisine = body.get('cuisine', '')
+                restaurant.operating_hours = body.get('operating_hours', {})
+                restaurant.update()
             else:
                 abort(404)
         except Exception:
@@ -263,18 +255,13 @@ def create_app(test_config = None):
             db.session.rollback()
             print(sys.exc_info())
         if not error:
-            flash(form.name.data + ' was successfully updated.', 'success')
+            print('Restaurant was successfully updated.')
             return jsonify({
                         "success": True,
                         "restaurant": restaurant.long()
                     })
         else:
-            flash('An error occurred. ' + message, 'error')
-            if form.errors:
-                for field, f_errors in form.errors.items():
-                    if f_errors:
-                        for error in f_errors:
-                            flash(field + ': ' + error, 'error')
+            print('An error occurred. Restaurant not updated.')
             abort(404)
 
     '''
