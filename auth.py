@@ -2,11 +2,13 @@ import json
 import os
 from os import environ as env
 from flask import request, _request_ctx_stack, abort, redirect
+from dotenv import load_dotenv, find_dotenv
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 
 # Configuration variables for Auth0
+load_dotenv()
 AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
 ALGORITHMS = ['RS256']
 API_AUDIENCE = os.getenv("AUTH0_AUDIENCE")
@@ -81,7 +83,9 @@ verify_decode_jwt(token) method
 '''
 def verify_decode_jwt(token):
     # GET THE PUBLIC KEY FROM AUTH0
+    print('inside verify decode jwt', AUTH0_DOMAIN)
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
+    print('jsonurl', jsonurl)
     jwks = json.loads(jsonurl.read())
 
     # GET THE DATA IN THE HEADER
@@ -110,14 +114,15 @@ def verify_decode_jwt(token):
     if rsa_key:
         try:
             # USE THE KEY TO VALIDATE THE JWT
+            print('env variables', ALGORITHMS, API_AUDIENCE)
             payload = jwt.decode(
                 token,
                 rsa_key,
                 algorithms=ALGORITHMS,
                 audience=API_AUDIENCE,
-                issuer='https://' + AUTH0_DOMAIN + '/'
+                issuer=f'https://{AUTH0_DOMAIN}/'
             )
-
+            print('payload', payload)
             return payload
 
         except jwt.ExpiredSignatureError:
@@ -158,6 +163,7 @@ def requires_auth(permission=''):
         @wraps(f)
         def wrapper(*args, **kwargs):
             jwt = get_token_auth_header()
+            print('jwt', jwt)
             try:
                 payload = verify_decode_jwt(jwt)
             except Exception:

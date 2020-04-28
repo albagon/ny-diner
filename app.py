@@ -12,7 +12,7 @@ from six.moves.urllib.parse import urlencode
 from datetime import datetime
 import sys
 
-from models import db, setup_db, db_drop_and_create_all, Restaurant, Review, dropTables
+from models import db, setup_db, db_create_all, Restaurant, Review, dropTables
 from data import populate_db
 from forms import *
 from auth import AuthError, requires_auth
@@ -23,17 +23,21 @@ def create_app(test_config = None):
 
     app = Flask(__name__)
     app.secret_key = os.getenv("AUTH0_CLIENT_SECRET")
-    setup_db(app)
+    if type(test_config) == dict:
+        app.db = setup_db(app, **test_config)
+    else:
+        app.db = setup_db(app)
 
     # Allow CORS for all domains on all routes
     CORS(app)
     dropTables()
-    db_drop_and_create_all()
+    db_create_all()
 
     '''
     INSERT records into db
     '''
-    populate_db()
+    if type(test_config) != dict:
+        populate_db()
 
     '''
     Auth0 routes
