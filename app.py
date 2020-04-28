@@ -165,10 +165,10 @@ def create_app(test_config = None):
                 new_review_f = new_review.format()
             else:
                 error = True
-        except:
+        except Exception:
             error = True
             db.session.rollback()
-            print(sys.exc_info())
+            #print(sys.exc_info())
         finally:
             db.session.close()
         if not error:
