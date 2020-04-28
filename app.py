@@ -216,9 +216,9 @@ def create_app(test_config = None):
                 error = True
         except:
             error = True
-            print('The restaurant could not be listed.')
+            #print('The restaurant could not be listed.')
             db.session.rollback()
-            print(sys.exc_info())
+            #print(sys.exc_info())
         finally:
             db.session.close()
         if not error:
@@ -266,7 +266,7 @@ def create_app(test_config = None):
             error = True
             message = 'The restaurant could not be updated.'
             db.session.rollback()
-            print(sys.exc_info())
+            #print(sys.exc_info())
         if not error:
             print('Restaurant was successfully updated.')
             return jsonify({
@@ -275,7 +275,7 @@ def create_app(test_config = None):
                     })
         else:
             print('An error occurred. Restaurant not updated.')
-            abort(422)
+            abort(404)
 
     '''
     DELETE /restaurants/<id>
@@ -309,9 +309,9 @@ def create_app(test_config = None):
                 abort(404)
         except Exception:
             db.session.rollback()
-            print(sys.exc_info())
+            #print(sys.exc_info())
             print('An error occurred. The restaurant could not be deleted.')
-            abort(422)
+            abort(404)
 
     # Error handlers for common status codes
     @app.errorhandler(401)
