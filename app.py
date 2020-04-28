@@ -98,6 +98,8 @@ def create_app(test_config = None):
                 any_restaurants = True
                 for restaurant in restaurants:
                     restaurants_short.append(restaurant.short())
+            else:
+                abort(404)
             return jsonify({
                 'success': True,
                 'restaurants': restaurants_short,
@@ -133,6 +135,8 @@ def create_app(test_config = None):
                     'restaurant': restaurant.long(),
                     'reviews': reviews_format
                 })
+            else:
+                abort(404)
         except Exception:
             abort(404)
 
@@ -275,8 +279,8 @@ def create_app(test_config = None):
         appropriate status code indicating reason for failure.
     '''
     @app.route('/restaurants/<int:id>', methods=['DELETE'])
-    @requires_auth
-    def delete_restaurant(id):
+    @requires_auth_p('delete:restaurants')
+    def delete_restaurant(payload, id):
         try:
             restaurant = Restaurant.query.filter(Restaurant.id == id).one_or_none()
             if restaurant != None:
@@ -286,17 +290,19 @@ def create_app(test_config = None):
                         review.delete()
 
                 restaurant.delete()
-                flash(restaurant.name + ' was successfully deleted.', 'success')
+                print(restaurant.name + ' was successfully deleted.')
                 return jsonify({
                         "success": True,
                         "delete": id,
                         "name": restaurant.name
                     })
+            else:
+                abort(404)
         except Exception:
             db.session.rollback()
             print(sys.exc_info())
-            flash('An error occurred. The restaurant could not be deleted.', 'error')
-        return abort(404)
+            print('An error occurred. The restaurant could not be deleted.')
+            abort(404)
 
     # Error handler for 401
     @app.errorhandler(401)
