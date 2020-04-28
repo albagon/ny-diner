@@ -177,65 +177,48 @@ def create_app(test_config = None):
             abort(422)
 
     '''
-    GET /new_restaurants
-        Renders the template associated with the new_restaurant form.
-    '''
-    @app.route('/new_restaurants', methods=['GET'])
-    @requires_auth
-    def create_restaurant_form():
-        try:
-            form = RestaurantForm()
-            return render_template('forms/new_restaurant.html',
-                                     userinfo=session['profile'],
-                                     form=form)
-        except Exception:
-            abort(404)
-
-    '''
     POST /new_restaurants
         Post a new restaurant in db.
     '''
     @app.route('/new_restaurants', methods=['POST'])
-    @requires_auth
-    def create_restaurant_submission():
+    @requires_auth_p('post:restaurants')
+    def create_restaurant_submission(payload):
         error = False
         try:
-            form = RestaurantForm(request.form)
-            if form.validate_on_submit():
-                op_hours = format_operating_hours(form)
-                if op_hours['success']:
-                    restaurant = Restaurant(
-                        name = form.name.data,
-                        borough = form.borough.data,
-                        photograph = form.photograph.data,
-                        img_description = form.img_description.data,
-                        address = form.address.data,
-                        latlng = [float(form.lat.data), float(form.lng.data)],
-                        cuisine = form.cuisine.data,
-                        operating_hours = op_hours['week_hours']
-                        )
-                    restaurant.insert()
-                else:
-                    error = True
-                    message = 'Wrong formating of operating hours.'
+            body = request.get_json()
+            latlng = body.get('latlng', {"lat":40, "lng":-73})
+            restaurant = Restaurant(
+                name = body.get('name', ''),
+                borough = body.get('borough', ''),
+                photograph = body.get('photograph', ''),
+                img_description = body.get('img_description', ''),
+                address = body.get('address', ''),
+                latlng = [float(latlng['lat']), float(latlng['lng'])],
+                cuisine = body.get('cuisine', ''),
+                operating_hours = body.get('operating_hours', {}),
+                )
+            restaurant.insert()
+            new_restaurant = Restaurant.query.filter(Restaurant.id == restaurant.id).one_or_none()
+            if new_restaurant != None:
+                new_restaurant_f = restaurant.long()
             else:
                 error = True
-                message = 'The form contains invalid data.'
         except:
             error = True
-            message = 'The restaurant could not be listed.'
+            print('The restaurant could not be listed.')
             db.session.rollback()
             print(sys.exc_info())
         finally:
             db.session.close()
         if not error:
-            flash(form.name.data + ' was successfully listed.', 'success')
-            return redirect('/new_restaurants')
+            print('Restaurant was successfully listed.')
+            return jsonify({
+                'success': True,
+                'restaurant': new_restaurant_f
+            })
         else:
-            flash('An error occurred. ' + message, 'error')
-            return render_template('forms/new_restaurant.html',
-                                     userinfo=session['profile'],
-                                     form=form)
+            print('An error occurred. Restaurant could not be listed.')
+            abort(422)
 
     '''
     PATCH /restaurants/<id>
