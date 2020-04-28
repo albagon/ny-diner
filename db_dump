@@ -1,0 +1,224 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.1
+-- Dumped by pg_dump version 12.1
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: alembic_version; Type: TABLE; Schema: public; Owner: alba
+--
+
+CREATE TABLE public.alembic_version (
+    version_num character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.alembic_version OWNER TO alba;
+
+--
+-- Name: restaurants; Type: TABLE; Schema: public; Owner: alba
+--
+
+CREATE TABLE public.restaurants (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    borough character varying NOT NULL,
+    photograph character varying NOT NULL,
+    img_description character varying NOT NULL,
+    address character varying NOT NULL,
+    latlng double precision[] NOT NULL,
+    cuisine character varying NOT NULL,
+    operating_hours json NOT NULL
+);
+
+
+ALTER TABLE public.restaurants OWNER TO alba;
+
+--
+-- Name: restaurants_id_seq; Type: SEQUENCE; Schema: public; Owner: alba
+--
+
+CREATE SEQUENCE public.restaurants_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.restaurants_id_seq OWNER TO alba;
+
+--
+-- Name: restaurants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: alba
+--
+
+ALTER SEQUENCE public.restaurants_id_seq OWNED BY public.restaurants.id;
+
+
+--
+-- Name: reviews; Type: TABLE; Schema: public; Owner: alba
+--
+
+CREATE TABLE public.reviews (
+    id integer NOT NULL,
+    restaurant_id integer NOT NULL,
+    name character varying NOT NULL,
+    date timestamp without time zone NOT NULL,
+    rating integer NOT NULL,
+    comments character varying NOT NULL
+);
+
+
+ALTER TABLE public.reviews OWNER TO alba;
+
+--
+-- Name: reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: alba
+--
+
+CREATE SEQUENCE public.reviews_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.reviews_id_seq OWNER TO alba;
+
+--
+-- Name: reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: alba
+--
+
+ALTER SEQUENCE public.reviews_id_seq OWNED BY public.reviews.id;
+
+
+--
+-- Name: restaurants id; Type: DEFAULT; Schema: public; Owner: alba
+--
+
+ALTER TABLE ONLY public.restaurants ALTER COLUMN id SET DEFAULT nextval('public.restaurants_id_seq'::regclass);
+
+
+--
+-- Name: reviews id; Type: DEFAULT; Schema: public; Owner: alba
+--
+
+ALTER TABLE ONLY public.reviews ALTER COLUMN id SET DEFAULT nextval('public.reviews_id_seq'::regclass);
+
+
+--
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: alba
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+\.
+
+
+--
+-- Data for Name: restaurants; Type: TABLE DATA; Schema: public; Owner: alba
+--
+
+COPY public.restaurants (id, name, borough, photograph, img_description, address, latlng, cuisine, operating_hours) FROM stdin;
+2	Emily	Brooklyn	https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668	A traditional margherita pizza	919 Fulton St, Brooklyn, NY 11238	{40.683555,-73.966393}	Italian	{"Monday": "17 - 23 hrs", "Tuesday": "17 - 23 hrs", "Wednesday": "17 - 23 hrs", "Thursday": "17 - 23 hrs", "Friday": "17 - 23 hrs", "Saturday": "17 - 23 hrs", "Sunday": "12 - 15 hrs"}
+3	Kang Ho Dong Baekjeong	Manhattan	https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668	An inside view of an empty restaurant. There is a steam pot in the middle of each table	1 E 32nd St, New York, NY 10016	{40.747143,-73.985414}	Korean	{"Monday": "11 - 23 hrs", "Tuesday": "11 - 23 hrs", "Wednesday": "11 - 23 hrs", "Thursday": "11 - 23 hrs", "Friday": "11 - 23 hrs", "Saturday": "11 - 23 hrs", "Sunday": "11 - 23 hrs"}
+4	Katz's Delicatessen	Manhattan	https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668	A night scene of people walking around the corner of a busy restaurant	205 E Houston St, New York, NY 10002	{40.722216,-73.987501}	American	{"Monday": "08 - 22 hrs", "Tuesday": "08 - 22 hrs", "Wednesday": "08 - 22 hrs", "Thursday": "08 - 23 hrs", "Friday": "08 - 23 hrs", "Saturday": "08 - 22 hrs", "Sunday": "08 - 22 hrs"}
+5	Roberta's Pizza	Brooklyn	https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668	An inside view of a relax and busy restaurant with a kitchen bar at the back	261 Moore St, Brooklyn, NY 11206	{40.705089,-73.933585}	Italian	{"Monday": "11 - 23 hrs", "Tuesday": "11 - 23 hrs", "Wednesday": "11 - 23 hrs", "Thursday": "11 - 23 hrs", "Friday": "11 - 23 hrs", "Saturday": "10 - 23 hrs", "Sunday": "10 - 23 hrs"}
+6	Casa Enrique	Queens	https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668	An inside view of an empty restaurant with a big bar and stools	5-48 49th Ave, Queens, NY 11101	{40.743394,-73.954235}	Mexican	{"Monday": "17 - 23 hrs", "Tuesday": "17 - 23 hrs", "Wednesday": "17 - 23 hrs", "Thursday": "17 - 23 hrs", "Friday": "17 - 23 hrs", "Saturday": "11 - 23 hrs", "Sunday": "11 - 23 hrs"}
+7	Mission Chinese Food4	Manhattan	https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668	An inside view of a busy restaurant with all tables ocupied by people enjoying their meal	171 E Broadway, New York, NY 10002	{40.713829,-73.989667}	Chinese	{"Monday": "5:30 pm - 11:00 pm", "Tuesday": "5:30 pm - 12:00 am", "Wednesday": "5:30 pm - 12:00 am", "Thursday": "5:30 pm - 12:00 am", "Friday": "5:30 pm - 12:00 am", "Saturday": "12:00 pm - 4:00 pm", "Sunday": "12:00 pm - 4:00 pm"}
+8	Mission Chinese Food	Manhattan	https://cdn.shopify.com/s/files/1/0734/9587/files/cafe_2048x2048.jpg?11619187030533083668	An inside view of a busy restaurant with all tables ocupied by people enjoying their meal	171 E Broadway, New York, NY 10002	{40.713829,-73.989667}	Chinese	{"Monday": "17 - 23 hrs", "Tuesday": "17 - 23 hrs", "Wednesday": "17 - 23 hrs", "Thursday": "17 - 23 hrs", "Friday": "17 - 23 hrs", "Saturday": "12 - 16 hrs", "Sunday": "12 - 16 hrs"}
+\.
+
+
+--
+-- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: alba
+--
+
+COPY public.reviews (id, restaurant_id, name, date, rating, comments) FROM stdin;
+4	2	Steph	2020-04-28 20:45:12.262736	4	Five star food, two star atmosphere. I would definitely get takeout from this place - but dont think I have the energy to deal with the hipster ridiculousness again. By the time we left the wait was two hours long.
+5	2	Steve	2020-04-28 20:45:12.265302	4	This cozy Clinton Hill restaurant excels at both straightforward and unusual wood-fired pizzas. If you want a taste of the latter, consider ordering the Emily, which is topped with mozzarella, pistachios, truffled sottocenere cheese, and honey. The menu includes salads and a handful of starters, as well as a burger that some meat connoisseurs consider to be among the best in the city.
+6	2	Sam	2020-04-28 20:45:12.267966	5	5 star atmosphere as it is very cozy with great staff. 5 star food as their Emmy burger is outrageously good and its on a pretzel bun... Too juicy for its own good and downright addicting. Also try the Colony pizza. Many others looked like worth competitors, but the Colony really found its way to my heart. when you start with a great crust, top it with top notch cheese and sauce, you've got a winner. But, if you go a step further and add the salty from the pepperoni, the sweet from the honey, and the spicy from the chili oil.... your mouth is confused and happy at the same time.
+7	3	Steve	2020-04-28 20:45:12.273064	4	The tables at this 32nd Street favorite are outfitted with grills for cooking short ribs, brisket, beef tongue, rib eye, and pork jowl. The banchan plates are uniformly good, and Deuki Hong’s menu also includes winning dishes like stir-fried squid noodles, kimchi stew, and seafood pancakes. If it’s available, make sure to order the kimchi and rice “lunchbox.” Baekjeong is a great place for large groups and birthday parties.
+8	3	ZS	2020-04-28 20:45:12.275913	5	I've been to Korea before and many other Korean BBQ places. We had the regular pork belly and a beef (forgot which cut) and a seafood tofu soup. Two meat and a soup was just prefect for the two of us. We could have done one meat and one soup. The portions of the meat are great! The beef was juicy, tender and so good. The sides were excellent.
+9	3	Emily	2020-04-28 20:45:12.278484	2	MEH. I've tried their Jersey location as well but Kang Ho Dong meat quality is severely decreasing. A Korean bbq place with whatever meat? I think NOT!
+10	5	Maria	2020-04-28 20:45:12.285747	4	Roberta's is the epicenter of the modern Brooklyn food scene.The pizzas are fantastic, but the restaurant really flexes its muscles with the vegetable dishes. In addition to the pies, consider ordering the radishes, the romaine salad, the roasted beets, and some of the charcuterie.
+11	5	Raymond	2020-04-28 20:45:12.288443	4	Roberta's, one of the best pizzas I have had in my life. Very trendy and hipsterish spot. Came here for lunch on a random weekday afternoon and when we arrived, there was a line forming already. The space is a bit cramped. You'll get to know your neighbors soon enough. The pizza is just delightful and delicious. It's a ncie plus that you get to see them firing up the pizzas in the corner. The major issue with Roberta's is the trek out to the Williamsburg/Bushwick.
+12	6	Sandra	2020-04-28 20:45:12.295326	5	Head to this laid-back Long Island City restaurant for beef tongue tacos, chicken smothered in a heady mole sauce, and a monster crab tostada. New York's only Michelin-starred Mexican restaurant is an especially cool choice for lunch during the week or drinks after work. Eater critic Ryan Sutton awarded this restaurant two stars.
+\.
+
+
+--
+-- Name: restaurants_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alba
+--
+
+SELECT pg_catalog.setval('public.restaurants_id_seq', 8, true);
+
+
+--
+-- Name: reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alba
+--
+
+SELECT pg_catalog.setval('public.reviews_id_seq', 14, true);
+
+
+--
+-- Name: alembic_version alembic_version_pkc; Type: CONSTRAINT; Schema: public; Owner: alba
+--
+
+ALTER TABLE ONLY public.alembic_version
+    ADD CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num);
+
+
+--
+-- Name: restaurants restaurants_name_key; Type: CONSTRAINT; Schema: public; Owner: alba
+--
+
+ALTER TABLE ONLY public.restaurants
+    ADD CONSTRAINT restaurants_name_key UNIQUE (name);
+
+
+--
+-- Name: restaurants restaurants_pkey; Type: CONSTRAINT; Schema: public; Owner: alba
+--
+
+ALTER TABLE ONLY public.restaurants
+    ADD CONSTRAINT restaurants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: reviews reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: alba
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: reviews reviews_restaurant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: alba
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_restaurant_id_fkey FOREIGN KEY (restaurant_id) REFERENCES public.restaurants(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

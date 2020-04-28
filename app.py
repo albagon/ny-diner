@@ -12,12 +12,11 @@ from six.moves.urllib.parse import urlencode
 from datetime import datetime
 import sys
 
-from models import db, setup_db, db_create_all, Restaurant, Review, dropTables
-from data import populate_db
+from models import db, setup_db, Restaurant, Review
 from forms import *
 from auth import AuthError, requires_auth
 
-def create_app(test_config = None):
+def create_app(test_config=None):
     # Load environment variables from dot env file.
     load_dotenv()
 
@@ -30,14 +29,6 @@ def create_app(test_config = None):
 
     # Allow CORS for all domains on all routes
     CORS(app)
-    dropTables()
-    db_create_all()
-
-    '''
-    INSERT records into db
-    '''
-    if type(test_config) != dict:
-        populate_db()
 
     '''
     Auth0 routes

@@ -1,8 +1,9 @@
 import os
+import json
 from sqlalchemy import Column, String, Integer, Float, DateTime, ARRAY, JSON, create_engine
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-import json
+from flask_migrate import Migrate
 
 from forms import *
 
@@ -15,24 +16,12 @@ setup_db(app)
     Binds a flask application and a SQLAlchemy service.
 '''
 def setup_db(app, database_path=database_path):
+    migrate = Migrate(app, db)
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
     return db
-
-'''
-Drop the database tables and start fresh
-Initialize a clean database
-'''
-def dropTables():
-        connection = create_engine(database_path)
-        connection.execute('drop table if exists reviews')
-        connection.execute('drop table if exists restaurants')
-        print('nothing...')
-
-def db_create_all():
-    db.create_all()
 
 
 '''
