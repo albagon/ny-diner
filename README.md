@@ -1,24 +1,8 @@
-# New York Diner
+# New York Diner API
 
 ## Introduction
 
-In this project, my goal is to apply all the new skills I've learned at
-Udacity's Full-Stack Developer Nanodegree. Some of these skills are:
-
-* Coding in Python 3
-* Relational Database Architecture
-* Modelling Data Objects with SQLAlchemy
-* Internet Protocols and Communication
-* Developing a Flask API
-* Authentication and Access
-* Authentication with Auth0
-* Authentication in Flask
-* Role-Based Access Control (RBAC)
-* Testing Flask Applications
-* Deploying Applications
-
-
-The **New York Diner** application will be deployed, managed and scaled in
+The **New York Diner API** will be deployed, managed and scaled in
 [Heroku](https://www.heroku.com/platform), a popular cloud platform. Another
 tool used in this project is [Gunicorn](https://gunicorn.org/), a pure-Python
 HTTP server for WSGI applications.
@@ -27,8 +11,7 @@ HTTP server for WSGI applications.
 
 1. Models will include at least…
 * Two classes with primary keys at at least two attributes each
-* [Optional but encouraged] One-to-many or many-to-many relationships
-between classes
+* One-to-many relationship between classes
 
 2. Endpoints will include at least…
 * Two GET requests
@@ -45,22 +28,17 @@ between classes
 * One test for error behaviour of each endpoint
 * At least two tests of RBAC for each role
 
-
-## About the Stack
-
-I have started this application based on a previous project I finished for my
-Front-End Developer Nanodegree at Udacity. The original repository can be found
-[here](https://github.com/albagon/restaurant-reviews). This application includes
-a service worker that creates a seamless offline experience for the users.
+### DEPLOYED AT HEROKU
+Visit [New York Diner API live](https://nydiner.herokuapp.com/).
 
 ### Backend
 
 This application features a complete Flask-SQLAlchemy server with a set of
-endpoints. Auth0 has been integrated for authentication.
+CRUD endpoints. Auth0 has been integrated for authentication.
 
-The original website sources its data from a JSON file but now, a new Postgresql
-Database has been integrated, along with other authentication features. For more information about the endpoint please visit the [NY Diner collection in Postman](https://documenter.getpostman.com/view/10562557/SzfDxQmm?version=latest)
-Please notice the jwt tokens should be obtain by logging into the app and then copied to a variable in the collection's environment. For testing purposes, 3 user have been created: the Diner, the Restaurateur and the NYdiner_admin. Each one with a different set of permissions.
+A Postgresql Database is used along with flask migration features. For more information about the endpoints visit the [NY Diner API collection in Postman](https://documenter.getpostman.com/view/10562557/SzfDxQmm?version=latest).
+Please notice the jwt token should be obtained by logging into the app and then
+copying it from the url into the corresponding variable in the collection's environment. For testing purposes, 3 users have been created: the Diner, the Restaurateur and the NYdiner_admin. Each one with a different set of permissions.
 
 Two models are created in the database:
 1. Restaurants
@@ -96,11 +74,13 @@ Two models are created in the database:
 AUTH0_CLIENT_ID=YOUR_AUTH0_CLIENT_ID
 AUTH0_DOMAIN=YOUR_AUTH0_DOMAIN
 AUTH0_CLIENT_SECRET=YOUR_CLIENT_SECRET
+AUTH0_AUDIENCE=YOUR_AUDIENCE
+AUTH0_CALLBACK_URL=YOUR_CALLBACK_URL
 ```
 
-### Before running the server
+### Before running the development server or unit tests
 
-Remember to “cd” into the application’s folder. To run the development server:
+Remember to “cd” into the application’s folder.
 
 1. Initialize and activate a virtual environment 
 ```
@@ -120,13 +100,14 @@ $ export TOKEN_DINER=a_new_token_for_diner_user_type
 $ export TOKEN_RESTAURATEUR=a_new_token_for_restaurateur_user_type
 $ export TOKEN_NYDINER_ADMIN=a_new_token_for_nydiner_admin_user_type
 ```
-The easiest way of getting a jwt while using this app is visiting the login page y copy the access code from the returned URL.
+Please notice the jwt token should be obtained by logging into the app and then
+copying it from the url into the corresponding environment variable.
 4. Create all the tables
 ```
-flask db upgrade
+$ flask db upgrade
 ```
 
-### DEVELOPMENT SERVER
+### Development Server
 1. Set more environment variables:
 ```
 $ export FLASK_DEBUG=True
@@ -134,31 +115,22 @@ $ export FLASK_ENV=development
 ```
 2. Run the development server:
 ```
-python app.py
+$ python app.py
 ```
 3. Navigate to Home page [http://localhost:5000](http://localhost:5000)
 
-### DEPLOYED AT HEROKU
-Visit [nydiner live](https://nydiner.herokuapp.com/).
+### Running Unit Tests
 
-### RUNNING UNIT TESTS
+1. Make sure you have set environment variables for: USER_TYPE (IT CAN BE DINER, RESTAURATEUR OR NYDINER_ADMIN), DATABASE_TEST_URL, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID and the corresponding TOKEN.
 
-1. Make sure you have set environment variables for: USER_TYPE (IT CAN BE DINER, RESTAURATEUR OR NYDINER), DATABASE_TEST_URL, AUTH0_CLIENT_SECRET, AUTH0_CLIENT_ID
-
-2. python3 test_app.py -v
+2. Run the tests
+```
+$ python3 test_app.py -v
+```
 
 ## Frontend
 
-Templates for login and logout have been added to this project.
-
-### Leaflet.js and Mapbox:
-
-This repository uses [leafletjs](https://leafletjs.com/) with [Mapbox](https://www.mapbox.com/).
-Mapbox is free to use, and does not require any payment information.
-
-### Note about ES6
-
-Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code. As much as possible, this repository will try to maintain use of ES6 in any additional JavaScript added to it.
+Simple templates for login and logout have been added to this project.
 
 ## Contributing
 
@@ -166,4 +138,4 @@ This repository is the result of a project I am working on to finish a Full-Stac
 
 ## License
 
-New York Diner is distributed under the [MIT license](LICENSE).
+New York Diner API is distributed under the [MIT license](LICENSE).
