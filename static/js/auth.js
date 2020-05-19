@@ -26,6 +26,7 @@ class Auth {
     localStorage.setItem("JWTS_LOCAL_KEY", this.token);
     if (this.token) {
       console.log(this.token);
+      document.getElementById("jwt").innerHTML = localStorage.getItem("JWTS_LOCAL_KEY");
     }
   }
 
